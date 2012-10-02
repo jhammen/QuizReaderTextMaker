@@ -1,0 +1,5 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="QuizReaderTextMaker" default="resolve">
+	<target name="resolve">
+		<ivy:retrieve />
+	</target>
+</project>

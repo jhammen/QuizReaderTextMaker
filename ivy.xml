@@ -1,0 +1,7 @@
+<ivy-module version="2.0">
+    <info organisation="quizreader.org" module="qrtm"/>
+    <dependencies>
+        <dependency org="org.apache.uima" name="uimaj-document-annotation" rev="2.4.0"/>
+        <dependency org="org.apache.uima" name="uimaj-tools" rev="2.4.0"/>
+    </dependencies>
+</ivy-module>

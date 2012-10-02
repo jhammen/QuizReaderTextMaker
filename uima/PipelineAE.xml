@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>false</primitive>
+  <delegateAnalysisEngineSpecifiers>
+    <delegateAnalysisEngine key="WikiAnnotatorAE">
+      <import location="WikiAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="QRXCasConsumer">
+      <import location="QRXCasConsumer.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="FrenchUnicodeTokenizer-AE">
+      <import name="tddts.preprocessing.ae.FrenchUnicodeTokenizer-AE"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="ParagraphAE">
+      <import location="ParagraphAE.xml"/>
+    </delegateAnalysisEngine>
+  </delegateAnalysisEngineSpecifiers>
+  <analysisEngineMetaData>
+    <name>aeDescriptor</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters searchStrategy="language_fallback"/>
+    <configurationParameterSettings/>
+    <flowConstraints>
+      <fixedFlow>
+        <node>ParagraphAE</node>
+        <node>FrenchUnicodeTokenizer-AE</node>
+        <node>WikiAnnotatorAE</node>
+        <node>QRXCasConsumer</node>
+      </fixedFlow>
+    </flowConstraints>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.ParagraphAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.WiktAnnotation</type>
+        </outputs>
+        <languagesSupported/>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+      <outputsNewCASes>false</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+  <resourceManagerConfiguration/>
+</analysisEngineDescription>

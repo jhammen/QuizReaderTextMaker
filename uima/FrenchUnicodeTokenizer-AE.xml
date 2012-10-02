@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>true</primitive>
+  <annotatorImplementationName>tddts.preprocessing.tokenizer.FrenchUnicodeTokenizer</annotatorImplementationName>
+  <analysisEngineMetaData>
+    <name>French Unicode Tokenizer</name>
+    <description>Create the annotations to split the text in words based. Takes advantage of Unicode classes.
+
+Specially designed for French.</description>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters>
+      <configurationParameter>
+        <name>SofaNames</name>
+        <description>The Sofa names the annotator should work on. If no names are specified, the annotator works on the default sofa.</description>
+        <type>String</type>
+        <multiValued>true</multiValued>
+        <mandatory>false</mandatory>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings/>
+    <typeSystemDescription>
+      <imports>
+        <import name="tddts.preprocessing.ts.words-TS"/>
+      </imports>
+      <types>
+        <typeDescription>
+          <name>org.apache.uima.TokenAnnotation</name>
+          <description>Single token annotation</description>
+          <supertypeName>uima.tcas.Annotation</supertypeName>
+        </typeDescription>
+      </types>
+    </typeSystemDescription>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs>
+          <type>org.apache.uima.TokenAnnotation</type>
+          <feature>org.apache.uima.TokenAnnotation:tokentype</feature>
+        </outputs>
+        <languagesSupported>
+          <language>x-unspecified</language>
+        </languagesSupported>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+      <outputsNewCASes>false</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+</analysisEngineDescription>
