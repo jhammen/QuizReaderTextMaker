@@ -62,7 +62,6 @@ public class QRXWriter extends CasConsumer_ImplBase {
 	public void initialize() throws ResourceInitializationException {
 		super.initialize();
 		try {
-			wiktionary.loadXML();
 			definitionFiles = new HashMap<String, DefinitionFile>();
 			defCount = new HashMap<String, Integer>();
 		} catch (Exception e) {

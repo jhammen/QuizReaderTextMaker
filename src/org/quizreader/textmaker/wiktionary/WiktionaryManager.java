@@ -18,26 +18,20 @@
 package org.quizreader.textmaker.wiktionary;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.stream.XMLStreamException;
 
 public class WiktionaryManager {
 
 	private Map<String, Entry> entries;
 
-	public static void main(String[] args) throws XMLStreamException, IOException, JAXBException {
-		new WiktionaryManager().loadXML();
-	}
-
-	public void loadXML() throws JAXBException {
+	public void loadXML(String path) throws JAXBException {
 		entries = new HashMap<String, Entry>();
-		File xmlFile = new File("txt/fr20111016.xml");
+		File xmlFile = new File(path);
 		JAXBContext jaxbContext = JAXBContext.newInstance(Wiktionary.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		Wiktionary wikt = (Wiktionary) jaxbUnmarshaller.unmarshal(xmlFile);

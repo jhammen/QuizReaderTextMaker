@@ -31,12 +31,12 @@ public class WiktionaryLookupApp {
 	WiktionaryManager wiktionary = new WiktionaryManager();
 
 	public static void main(String[] args) throws Exception {
-		new WiktionaryLookupApp().run();
+		new WiktionaryLookupApp().run(args[0]);
 	}
 
-	public void run() throws Exception {
+	public void run(String path) throws Exception {
 
-		wiktionary.loadXML();
+		wiktionary.loadXML(path);
 
 		final JFrame jFrame = new JFrame();
 		jFrame.setLayout(new GridBagLayout());

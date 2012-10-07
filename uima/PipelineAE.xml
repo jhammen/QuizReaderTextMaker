@@ -25,10 +25,8 @@
     <configurationParameterSettings/>
     <flowConstraints>
       <fixedFlow>
-        <node>ParagraphAE</node>
         <node>FrenchUnicodeTokenizer-AE</node>
         <node>WikiAnnotatorAE</node>
-        <node>QRXCasConsumer</node>
       </fixedFlow>
     </flowConstraints>
     <fsIndexCollection/>

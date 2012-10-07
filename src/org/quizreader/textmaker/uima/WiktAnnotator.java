@@ -38,13 +38,16 @@ import org.quizreader.textmaker.wiktionary.WiktionaryManager;
 
 public class WiktAnnotator extends JCasAnnotator_ImplBase {
 
+	private static final String WIKTIONARY_XML_PATH_KEY = "wiktionaryXml";
+
 	WiktionaryManager wiktionary = new WiktionaryManager();
 
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
 		try {
-			wiktionary.loadXML();
+			String resourceFilePath = (String) aContext.getConfigParameterValue(WIKTIONARY_XML_PATH_KEY);
+			wiktionary.loadXML(resourceFilePath);
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}
@@ -56,7 +59,11 @@ public class WiktAnnotator extends JCasAnnotator_ImplBase {
 		Logger logger = getContext().getLogger();
 		// String docText = aJCas.getDocumentText();
 		FSIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type);
-		int tokCount = 0;
+		if (tokenIndex.size() == 0) {
+			logger.log(Level.SEVERE, "No token annotations found! Was the document tokenised?");
+			System.err.println("No token annotations found! Was the document tokenised?");
+			return;
+		}
 		for (Annotation tok : tokenIndex) {
 			TokenAnnotation anno = (TokenAnnotation) tok;
 			String coveredText = tok.getCoveredText();
@@ -80,13 +87,7 @@ public class WiktAnnotator extends JCasAnnotator_ImplBase {
 				}
 
 			}
-			// wikiAnno.set
-			// do something
-			tokCount++;
 		}
-		if (tokCount == 0) {
-			logger.log(Level.SEVERE, "No token annotations found! Was the document tokenised?");
-			System.err.println("No token annotations found! Was the document tokenised?");
-		}
+
 	}
 }
