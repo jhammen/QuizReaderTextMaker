@@ -12,7 +12,7 @@ import org.apache.uima.jcas.cas.StringArray;
 
 
 /** 
- * Updated by JCasGen Mon Jun 25 23:04:10 MDT 2012
+ * Updated by JCasGen Sun Oct 07 15:04:38 MDT 2012
  * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
  * @generated */
 public class DefinitionAnnotation extends Annotation {

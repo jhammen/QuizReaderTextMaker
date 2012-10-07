@@ -3,5 +3,6 @@
     <dependencies>
         <dependency org="org.apache.uima" name="uimaj-document-annotation" rev="2.4.0"/>
         <dependency org="org.apache.uima" name="uimaj-tools" rev="2.4.0"/>
+        <dependency org="org.apache.uima" name="TikaAnnotator" rev="2.3.1"/>
     </dependencies>
 </ivy-module>

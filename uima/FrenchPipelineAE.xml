@@ -12,8 +12,14 @@
     <delegateAnalysisEngine key="FrenchUnicodeTokenizer-AE">
       <import name="tddts.preprocessing.ae.FrenchUnicodeTokenizer-AE"/>
     </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OutputFileAE">
+      <import location="OutputFileAE.xml"/>
+    </delegateAnalysisEngine>
     <delegateAnalysisEngine key="ParagraphAE">
       <import location="ParagraphAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="MarkupAnnotator">
+      <import location="MarkupAnnotator.xml"/>
     </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
@@ -25,18 +31,22 @@
     <configurationParameterSettings/>
     <flowConstraints>
       <fixedFlow>
+        <node>MarkupAnnotator</node>
         <node>FrenchUnicodeTokenizer-AE</node>
         <node>WikiAnnotatorAE</node>
+        <node>OutputFileAE</node>
       </fixedFlow>
     </flowConstraints>
+    <typePriorities/>
     <fsIndexCollection/>
     <capabilities>
       <capability>
         <inputs/>
         <outputs>
-          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.ParagraphAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.WiktAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.tika.MarkupAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.OutputFileAnnotation</type>
         </outputs>
         <languagesSupported/>
       </capability>
