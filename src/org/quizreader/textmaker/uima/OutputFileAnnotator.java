@@ -17,23 +17,15 @@
 
 package org.quizreader.textmaker.uima;
 
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
-import org.apache.uima.cas.FSIterator;
 import org.apache.uima.cas.text.AnnotationIndex;
-import org.apache.uima.examples.SourceDocumentInformation;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.tika.MarkupAnnotation;
-import org.apache.uima.util.Level;
-import org.apache.uima.util.Logger;
 import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 
 public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
@@ -48,8 +40,7 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
-		Logger logger = getContext().getLogger();
-		File inFile = getInputFile(aJCas);
+		// Logger logger = getContext().getLogger();
 
 		OutputFileAnnotation sectionAnno = null;
 		AnnotationIndex<Annotation> markupIndex = aJCas.getAnnotationIndex(MarkupAnnotation.type);
@@ -63,9 +54,7 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 				}
 				sectionAnno = new OutputFileAnnotation(aJCas);
 				sectionAnno.setBegin(anno.getBegin());
-				File htmlFile = new File(inFile.getName() + "." + fileCounter++ + ".html");
-				sectionAnno.setFilePath(htmlFile.getAbsolutePath());
-				logger.log(Level.INFO, "new output file annotation: " + htmlFile.getAbsolutePath());
+				sectionAnno.setFilePath("part" + fileCounter++ + ".html");
 			}
 		}
 		if (sectionAnno != null) {
@@ -73,20 +62,6 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 			sectionAnno.setEnd(docAnno.getEnd());
 			sectionAnno.addToIndexes();
 		}
-	}
-
-	private File getInputFile(JCas jcas) {
-		FSIterator<Annotation> it = jcas.getAnnotationIndex(SourceDocumentInformation.type).iterator();
-		if (it.hasNext()) {
-			SourceDocumentInformation fileLoc = (SourceDocumentInformation) it.next();
-			try {
-				return new File(new URL(fileLoc.getUri()).getPath());
-
-			} catch (MalformedURLException e1) {
-				return null;
-			}
-		}
-		return null;
 	}
 
 }
