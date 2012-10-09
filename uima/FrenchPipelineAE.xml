@@ -3,8 +3,8 @@
   <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
   <primitive>false</primitive>
   <delegateAnalysisEngineSpecifiers>
-    <delegateAnalysisEngine key="WikiAnnotatorAE">
-      <import location="WikiAnnotatorAE.xml"/>
+    <delegateAnalysisEngine key="WiktAnnotatorAE">
+      <import location="WiktAnnotatorAE.xml"/>
     </delegateAnalysisEngine>
     <delegateAnalysisEngine key="QRXCasConsumer">
       <import location="QRXCasConsumer.xml"/>
@@ -14,9 +14,6 @@
     </delegateAnalysisEngine>
     <delegateAnalysisEngine key="OutputFileAE">
       <import location="OutputFileAE.xml"/>
-    </delegateAnalysisEngine>
-    <delegateAnalysisEngine key="ParagraphAE">
-      <import location="ParagraphAE.xml"/>
     </delegateAnalysisEngine>
     <delegateAnalysisEngine key="MarkupAnnotator">
       <import location="MarkupAnnotator.xml"/>
@@ -33,7 +30,7 @@
       <fixedFlow>
         <node>MarkupAnnotator</node>
         <node>FrenchUnicodeTokenizer-AE</node>
-        <node>WikiAnnotatorAE</node>
+        <node>WiktAnnotatorAE</node>
         <node>OutputFileAE</node>
       </fixedFlow>
     </flowConstraints>
@@ -47,7 +44,11 @@
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.WiktAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.tika.MarkupAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.OutputFileAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
         </outputs>
+        <inputSofas>
+          <sofaName>pipelineTextView</sofaName>
+        </inputSofas>
         <languagesSupported/>
       </capability>
     </capabilities>
@@ -58,4 +59,23 @@
     </operationalProperties>
   </analysisEngineMetaData>
   <resourceManagerConfiguration/>
+  <sofaMappings>
+    <sofaMapping>
+      <componentKey>MarkupAnnotator</componentKey>
+      <componentSofaName>textView</componentSofaName>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>FrenchUnicodeTokenizer-AE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>WiktAnnotatorAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>OutputFileAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  </sofaMappings>
 </analysisEngineDescription>
