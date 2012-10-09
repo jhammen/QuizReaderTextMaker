@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Sun Oct 07 15:04:38 MDT 2012
+ * Updated by JCasGen Mon Oct 08 20:16:42 MDT 2012
  * @generated */
 public class WiktAnnotation_Type extends Annotation_Type {
   /** @generated */
@@ -44,11 +44,35 @@ public class WiktAnnotation_Type extends Annotation_Type {
   @SuppressWarnings ("hiding")
   public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.quizreader.textmaker.uima.types.WiktAnnotation");
  
+  /** @generated */
+  final Feature casFeat_Excerpt;
+  /** @generated */
+  final int     casFeatCode_Excerpt;
+  /** @generated */ 
+  public String getExcerpt(int addr) {
+        if (featOkTst && casFeat_Excerpt == null)
+      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.WiktAnnotation");
+    return ll_cas.ll_getStringValue(addr, casFeatCode_Excerpt);
+  }
+  /** @generated */    
+  public void setExcerpt(int addr, String v) {
+        if (featOkTst && casFeat_Excerpt == null)
+      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.WiktAnnotation");
+    ll_cas.ll_setStringValue(addr, casFeatCode_Excerpt, v);}
+    
+  
+
+
+
   /** initialize variables to correspond with Cas Type and Features
 	* @generated */
   public WiktAnnotation_Type(JCas jcas, Type casType) {
     super(jcas, casType);
     casImpl.getFSClassRegistry().addGeneratorForType((TypeImpl)this.casType, getFSGenerator());
+
+ 
+    casFeat_Excerpt = jcas.getRequiredFeatureDE(casType, "Excerpt", "uima.cas.String", featOkTst);
+    casFeatCode_Excerpt  = (null == casFeat_Excerpt) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_Excerpt).getCode();
 
   }
 }

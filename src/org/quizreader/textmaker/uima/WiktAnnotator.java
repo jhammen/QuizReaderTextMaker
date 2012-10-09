@@ -17,10 +17,6 @@
 
 package org.quizreader.textmaker.uima;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.uima.TokenAnnotation;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
@@ -30,9 +26,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
-import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
 import org.quizreader.textmaker.uima.types.WiktAnnotation;
-import org.quizreader.textmaker.wiktionary.Definition;
 import org.quizreader.textmaker.wiktionary.Entry;
 import org.quizreader.textmaker.wiktionary.WiktionaryManager;
 
@@ -55,7 +49,6 @@ public class WiktAnnotator extends JCasAnnotator_ImplBase {
 
 	public void process(JCas aJCas) {
 
-		Map<String, Boolean> defined = new HashMap<String, Boolean>();
 		Logger logger = getContext().getLogger();
 		// String docText = aJCas.getDocumentText();
 		FSIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type);
@@ -65,27 +58,18 @@ public class WiktAnnotator extends JCasAnnotator_ImplBase {
 			return;
 		}
 		for (Annotation tok : tokenIndex) {
-			TokenAnnotation anno = (TokenAnnotation) tok;
+			// TokenAnnotation anno = (TokenAnnotation) tok;
 			String coveredText = tok.getCoveredText();
 
 			Entry entry = wiktionary.getEntry(coveredText);
-			if (entry != null && entry.getDefinitions() != null) {
-				List<Definition> definitions = entry.getDefinitions();
-				// anno.get
+			if (entry != null) {
 				WiktAnnotation wikiAnno = new WiktAnnotation(aJCas);
 				wikiAnno.setBegin(tok.getBegin());
 				wikiAnno.setEnd(tok.getEnd());
-				wikiAnno.addToIndexes();
-
-				if (defined.get(coveredText) == null) {
-					DefinitionAnnotation definition = new DefinitionAnnotation(aJCas);
-					definition.setBegin(tok.getBegin()); // first occurrence
-					definition.setEnd(tok.getEnd());
-					definition.setDefinition(entry.getDefinitions().get(0).getText());
-					definition.addToIndexes();
-					defined.put(coveredText, true);
+				if (entry.getDefinitions() != null) {
+					wikiAnno.setExcerpt(entry.getDefinitions().get(0).getText());
 				}
-
+				wikiAnno.addToIndexes();
 			}
 		}
 

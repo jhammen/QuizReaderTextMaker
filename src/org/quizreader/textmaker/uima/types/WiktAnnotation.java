@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Oct 07 15:04:38 MDT 2012
+ * Updated by JCasGen Mon Oct 08 20:16:42 MDT 2012
  * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
  * @generated */
 public class WiktAnnotation extends Annotation {
@@ -62,6 +62,22 @@ public class WiktAnnotation extends Annotation {
      
  
     
-}
+  //*--------------*
+  //* Feature: Excerpt
+
+  /** getter for Excerpt - gets 
+   * @generated */
+  public String getExcerpt() {
+    if (WiktAnnotation_Type.featOkTst && ((WiktAnnotation_Type)jcasType).casFeat_Excerpt == null)
+      jcasType.jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.WiktAnnotation");
+    return jcasType.ll_cas.ll_getStringValue(addr, ((WiktAnnotation_Type)jcasType).casFeatCode_Excerpt);}
+    
+  /** setter for Excerpt - sets  
+   * @generated */
+  public void setExcerpt(String v) {
+    if (WiktAnnotation_Type.featOkTst && ((WiktAnnotation_Type)jcasType).casFeat_Excerpt == null)
+      jcasType.jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.WiktAnnotation");
+    jcasType.ll_cas.ll_setStringValue(addr, ((WiktAnnotation_Type)jcasType).casFeatCode_Excerpt, v);}    
+  }
 
     

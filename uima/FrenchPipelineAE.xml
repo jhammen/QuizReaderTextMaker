@@ -40,7 +40,6 @@
       <capability>
         <inputs/>
         <outputs>
-          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.WiktAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.tika.MarkupAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.OutputFileAnnotation</type>
