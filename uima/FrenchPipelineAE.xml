@@ -3,11 +3,11 @@
   <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
   <primitive>false</primitive>
   <delegateAnalysisEngineSpecifiers>
-    <delegateAnalysisEngine key="WiktAnnotatorAE">
-      <import location="WiktAnnotatorAE.xml"/>
+    <delegateAnalysisEngine key="DefinitionAnnotatorAE">
+      <import location="DefinitionAnnotatorAE.xml"/>
     </delegateAnalysisEngine>
-    <delegateAnalysisEngine key="QRXCasConsumer">
-      <import location="QRXCasConsumer.xml"/>
+    <delegateAnalysisEngine key="HTMLWriter">
+      <import location="HTMLWriter.xml"/>
     </delegateAnalysisEngine>
     <delegateAnalysisEngine key="FrenchUnicodeTokenizer-AE">
       <import name="tddts.preprocessing.ae.FrenchUnicodeTokenizer-AE"/>
@@ -20,7 +20,7 @@
     </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
-    <name>aeDescriptor</name>
+    <name>FrenchPipelineAE</name>
     <description/>
     <version>1.0</version>
     <vendor/>
@@ -30,8 +30,9 @@
       <fixedFlow>
         <node>MarkupAnnotator</node>
         <node>FrenchUnicodeTokenizer-AE</node>
-        <node>WiktAnnotatorAE</node>
+        <node>DefinitionAnnotatorAE</node>
         <node>OutputFileAE</node>
+        <node>HTMLWriter</node>
       </fixedFlow>
     </flowConstraints>
     <typePriorities/>
@@ -40,7 +41,7 @@
       <capability>
         <inputs/>
         <outputs>
-          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.WiktAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.tika.MarkupAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.OutputFileAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
@@ -69,11 +70,15 @@
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
     <sofaMapping>
-      <componentKey>WiktAnnotatorAE</componentKey>
+      <componentKey>DefinitionAnnotatorAE</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
     <sofaMapping>
       <componentKey>OutputFileAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>HTMLWriter</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
   </sofaMappings>

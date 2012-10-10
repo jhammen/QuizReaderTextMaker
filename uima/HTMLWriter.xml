@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+<casConsumerDescription xmlns="http://uima.apache.org/resourceSpecifier">
   <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
-  <primitive>true</primitive>
-  <annotatorImplementationName>org.quizreader.textmaker.uima.OutputFileAnnotator</annotatorImplementationName>
-  <analysisEngineMetaData>
-    <name>OutputFileAE</name>
-    <description/>
-    <version>1.0</version>
-    <vendor/>
+  <implementationName>org.quizreader.textmaker.uima.HTMLWriter</implementationName>
+  <processingResourceMetaData>
+    <name/>
     <configurationParameters>
       <configurationParameter>
-        <name>splitTags</name>
+        <name>passTags</name>
         <type>String</type>
         <multiValued>true</multiValued>
         <mandatory>true</mandatory>
@@ -18,9 +14,12 @@
     </configurationParameters>
     <configurationParameterSettings>
       <nameValuePair>
-        <name>splitTags</name>
+        <name>passTags</name>
         <value>
           <array>
+            <string>p</string>
+            <string>i</string>
+            <string>b</string>
             <string>h2</string>
             <string>h3</string>
           </array>
@@ -28,20 +27,11 @@
       </nameValuePair>
     </configurationParameterSettings>
     <typeSystemDescription/>
-    <typePriorities/>
-    <fsIndexCollection/>
-    <capabilities>
-      <capability>
-        <inputs/>
-        <outputs/>
-        <languagesSupported/>
-      </capability>
-    </capabilities>
+    <capabilities/>
     <operationalProperties>
-      <modifiesCas>true</modifiesCas>
+      <modifiesCas>false</modifiesCas>
       <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
       <outputsNewCASes>false</outputsNewCASes>
     </operationalProperties>
-  </analysisEngineMetaData>
-  <resourceManagerConfiguration/>
-</analysisEngineDescription>
+  </processingResourceMetaData>
+</casConsumerDescription>

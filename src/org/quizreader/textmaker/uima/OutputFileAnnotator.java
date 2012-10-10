@@ -17,6 +17,9 @@
 
 package org.quizreader.textmaker.uima;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -30,11 +33,17 @@ import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 
 public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 
+	private static final String CONFIG_PARAM_SPLIT_TAGS = "splitTags";
 	private int fileCounter;
+	private Set<String> splitTags;
 
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
+		splitTags = new HashSet<String>();
+		for (String tag : (String[]) aContext.getConfigParameterValue(CONFIG_PARAM_SPLIT_TAGS)) {
+			splitTags.add(tag.toLowerCase());
+		}
 		fileCounter = 1;
 	}
 
@@ -47,7 +56,7 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 		// create break list
 		for (Annotation anno : markupIndex) {
 			MarkupAnnotation markup = (MarkupAnnotation) anno;
-			if ("h2".equalsIgnoreCase(markup.getName())) { // TODO: parameterize split tag
+			if (splitTags.contains(markup.getName().toLowerCase())) {
 				if (sectionAnno != null) {
 					sectionAnno.setEnd(anno.getBegin() - 1);
 					sectionAnno.addToIndexes();
@@ -59,7 +68,7 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 		}
 		if (sectionAnno != null) {
 			DocumentAnnotation docAnno = (DocumentAnnotation) aJCas.getDocumentAnnotationFs();
-			sectionAnno.setEnd(docAnno.getEnd());
+			sectionAnno.setEnd(docAnno.getEnd() - 1);
 			sectionAnno.addToIndexes();
 		}
 	}

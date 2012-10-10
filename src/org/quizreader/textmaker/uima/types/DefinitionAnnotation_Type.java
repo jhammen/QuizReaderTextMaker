@@ -1,5 +1,5 @@
 
-/* First created by JCasGen Wed Jun 13 14:33:29 MDT 2012 */
+/* First created by JCasGen Tue Oct 09 21:26:19 MDT 2012 */
 package org.quizreader.textmaker.uima.types;
 
 import org.apache.uima.jcas.JCas;
@@ -14,9 +14,9 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Mon Oct 08 20:16:42 MDT 2012
+ * Updated by JCasGen Tue Oct 09 21:26:19 MDT 2012
  * @generated */
-public class WiktAnnotation_Type extends Annotation_Type {
+public class DefinitionAnnotation_Type extends Annotation_Type {
   /** @generated */
   @Override
   protected FSGenerator getFSGenerator() {return fsGenerator;}
@@ -24,25 +24,25 @@ public class WiktAnnotation_Type extends Annotation_Type {
   private final FSGenerator fsGenerator = 
     new FSGenerator() {
       public FeatureStructure createFS(int addr, CASImpl cas) {
-  			 if (WiktAnnotation_Type.this.useExistingInstance) {
+  			 if (DefinitionAnnotation_Type.this.useExistingInstance) {
   			   // Return eq fs instance if already created
-  		     FeatureStructure fs = WiktAnnotation_Type.this.jcas.getJfsFromCaddr(addr);
+  		     FeatureStructure fs = DefinitionAnnotation_Type.this.jcas.getJfsFromCaddr(addr);
   		     if (null == fs) {
-  		       fs = new WiktAnnotation(addr, WiktAnnotation_Type.this);
-  			   WiktAnnotation_Type.this.jcas.putJfsFromCaddr(addr, fs);
+  		       fs = new DefinitionAnnotation(addr, DefinitionAnnotation_Type.this);
+  			   DefinitionAnnotation_Type.this.jcas.putJfsFromCaddr(addr, fs);
   			   return fs;
   		     }
   		     return fs;
-        } else return new WiktAnnotation(addr, WiktAnnotation_Type.this);
+        } else return new DefinitionAnnotation(addr, DefinitionAnnotation_Type.this);
   	  }
     };
   /** @generated */
   @SuppressWarnings ("hiding")
-  public final static int typeIndexID = WiktAnnotation.typeIndexID;
+  public final static int typeIndexID = DefinitionAnnotation.typeIndexID;
   /** @generated 
      @modifiable */
   @SuppressWarnings ("hiding")
-  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.quizreader.textmaker.uima.types.WiktAnnotation");
+  public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.quizreader.textmaker.uima.types.DefinitionAnnotation");
  
   /** @generated */
   final Feature casFeat_Excerpt;
@@ -51,13 +51,13 @@ public class WiktAnnotation_Type extends Annotation_Type {
   /** @generated */ 
   public String getExcerpt(int addr) {
         if (featOkTst && casFeat_Excerpt == null)
-      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.WiktAnnotation");
+      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
     return ll_cas.ll_getStringValue(addr, casFeatCode_Excerpt);
   }
   /** @generated */    
   public void setExcerpt(int addr, String v) {
         if (featOkTst && casFeat_Excerpt == null)
-      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.WiktAnnotation");
+      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
     ll_cas.ll_setStringValue(addr, casFeatCode_Excerpt, v);}
     
   
@@ -66,7 +66,7 @@ public class WiktAnnotation_Type extends Annotation_Type {
 
   /** initialize variables to correspond with Cas Type and Features
 	* @generated */
-  public WiktAnnotation_Type(JCas jcas, Type casType) {
+  public DefinitionAnnotation_Type(JCas jcas, Type casType) {
     super(jcas, casType);
     casImpl.getFSClassRegistry().addGeneratorForType((TypeImpl)this.casType, getFSGenerator());
 

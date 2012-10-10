@@ -26,11 +26,11 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
-import org.quizreader.textmaker.uima.types.WiktAnnotation;
+import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
 import org.quizreader.textmaker.wiktionary.Entry;
 import org.quizreader.textmaker.wiktionary.WiktionaryManager;
 
-public class WiktAnnotator extends JCasAnnotator_ImplBase {
+public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 	private static final String WIKTIONARY_XML_PATH_KEY = "wiktionaryXml";
 
@@ -63,13 +63,13 @@ public class WiktAnnotator extends JCasAnnotator_ImplBase {
 
 			Entry entry = wiktionary.getEntry(coveredText);
 			if (entry != null) {
-				WiktAnnotation wikiAnno = new WiktAnnotation(aJCas);
-				wikiAnno.setBegin(tok.getBegin());
-				wikiAnno.setEnd(tok.getEnd());
+				DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
+				defAnno.setBegin(tok.getBegin());
+				defAnno.setEnd(tok.getEnd());
 				if (entry.getDefinitions() != null) {
-					wikiAnno.setExcerpt(entry.getDefinitions().get(0).getText());
+					defAnno.setExcerpt(entry.getDefinitions().get(0).getText());
 				}
-				wikiAnno.addToIndexes();
+				defAnno.addToIndexes();
 			}
 		}
 

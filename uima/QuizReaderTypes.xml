@@ -34,7 +34,7 @@
       </features>
     </typeDescription>
     <typeDescription>
-      <name>org.quizreader.textmaker.uima.types.WiktAnnotation</name>
+      <name>org.quizreader.textmaker.uima.types.DefinitionAnnotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>
@@ -44,6 +44,6 @@
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
       </features>
-    </typeDescription>  
+    </typeDescription>
   </types>
 </typeSystemDescription>
