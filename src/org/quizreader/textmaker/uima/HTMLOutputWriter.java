@@ -38,12 +38,12 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceProcessException;
-import org.apache.uima.tika.MarkupAnnotation;
 import org.apache.uima.util.ProcessTrace;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
+import org.quizreader.textmaker.uima.types.HTMLAnnotation;
 import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 
-public class HTMLWriter extends CasConsumer_ImplBase {
+public class HTMLOutputWriter extends CasConsumer_ImplBase {
 
 	private static final String CONFIG_PARAM_PASS_TAGS = "passTags";
 
@@ -82,7 +82,7 @@ public class HTMLWriter extends CasConsumer_ImplBase {
 
 		AnnotationIndex<Annotation> fileIndex = jcas.getAnnotationIndex(OutputFileAnnotation.type);
 		AnnotationIndex<Annotation> defIndex = jcas.getAnnotationIndex(DefinitionAnnotation.type);
-		AnnotationIndex<Annotation> markupIndex = jcas.getAnnotationIndex(MarkupAnnotation.type);
+		AnnotationIndex<Annotation> markupIndex = jcas.getAnnotationIndex(HTMLAnnotation.type);
 
 		Set<String> suppressTags = new HashSet<String>();
 
@@ -119,7 +119,7 @@ public class HTMLWriter extends CasConsumer_ImplBase {
 				}
 				// print out markup tags at this location (pass tags only)
 				while (markupAnno != null && markupAnno.getBegin() == i) {
-					String tag = ((MarkupAnnotation) markupAnno).getName();
+					String tag = ((HTMLAnnotation) markupAnno).getName();
 					if (passTags.contains(tag.toLowerCase())) {
 						htmlStream.print("<" + tag + ">");
 						addEndTag(endTags, tag, markupAnno.getEnd());

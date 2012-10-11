@@ -6,17 +6,17 @@
     <delegateAnalysisEngine key="DefinitionAnnotatorAE">
       <import location="DefinitionAnnotatorAE.xml"/>
     </delegateAnalysisEngine>
-    <delegateAnalysisEngine key="HTMLWriter">
-      <import location="HTMLWriter.xml"/>
+    <delegateAnalysisEngine key="HTMLOutputWriter">
+      <import location="HTMLOutputWriter.xml"/>
     </delegateAnalysisEngine>
     <delegateAnalysisEngine key="FrenchUnicodeTokenizer-AE">
       <import name="tddts.preprocessing.ae.FrenchUnicodeTokenizer-AE"/>
     </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="HTMLInputAnnotatorAE">
+      <import location="HTMLInputAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
     <delegateAnalysisEngine key="OutputFileAE">
       <import location="OutputFileAE.xml"/>
-    </delegateAnalysisEngine>
-    <delegateAnalysisEngine key="MarkupAnnotator">
-      <import location="MarkupAnnotator.xml"/>
     </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
@@ -28,11 +28,9 @@
     <configurationParameterSettings/>
     <flowConstraints>
       <fixedFlow>
-        <node>MarkupAnnotator</node>
+        <node>HTMLInputAnnotatorAE</node>
         <node>FrenchUnicodeTokenizer-AE</node>
         <node>DefinitionAnnotatorAE</node>
-        <node>OutputFileAE</node>
-        <node>HTMLWriter</node>
       </fixedFlow>
     </flowConstraints>
     <typePriorities/>
@@ -42,7 +40,7 @@
         <inputs/>
         <outputs>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
-          <type allAnnotatorFeatures="true">org.apache.uima.tika.MarkupAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.HTMLAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.OutputFileAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
         </outputs>
@@ -61,7 +59,7 @@
   <resourceManagerConfiguration/>
   <sofaMappings>
     <sofaMapping>
-      <componentKey>MarkupAnnotator</componentKey>
+      <componentKey>HTMLInputAnnotatorAE</componentKey>
       <componentSofaName>textView</componentSofaName>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
@@ -78,7 +76,7 @@
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
     <sofaMapping>
-      <componentKey>HTMLWriter</componentKey>
+      <componentKey>HTMLOutputWriter</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
   </sofaMappings>

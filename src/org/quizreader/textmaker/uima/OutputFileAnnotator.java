@@ -28,7 +28,7 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
 import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.tika.MarkupAnnotation;
+import org.quizreader.textmaker.uima.types.HTMLAnnotation;
 import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 
 public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
@@ -52,10 +52,10 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 		// Logger logger = getContext().getLogger();
 
 		OutputFileAnnotation sectionAnno = null;
-		AnnotationIndex<Annotation> markupIndex = aJCas.getAnnotationIndex(MarkupAnnotation.type);
+		AnnotationIndex<Annotation> markupIndex = aJCas.getAnnotationIndex(HTMLAnnotation.type);
 		// create break list
 		for (Annotation anno : markupIndex) {
-			MarkupAnnotation markup = (MarkupAnnotation) anno;
+			HTMLAnnotation markup = (HTMLAnnotation) anno;
 			if (splitTags.contains(markup.getName().toLowerCase())) {
 				if (sectionAnno != null) {
 					sectionAnno.setEnd(anno.getBegin() - 1);

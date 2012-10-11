@@ -22,6 +22,18 @@
   </imports>
   <types>
     <typeDescription>
+      <name>org.quizreader.textmaker.uima.types.DefinitionAnnotation</name>
+      <description/>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>Excerpt</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
       <name>org.quizreader.textmaker.uima.types.OutputFileAnnotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
@@ -33,13 +45,13 @@
         </featureDescription>
       </features>
     </typeDescription>
-    <typeDescription>
-      <name>org.quizreader.textmaker.uima.types.DefinitionAnnotation</name>
+      <typeDescription>
+      <name>org.quizreader.textmaker.uima.types.HTMLAnnotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>
         <featureDescription>
-          <name>Excerpt</name>
+          <name>name</name>
           <description/>
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
