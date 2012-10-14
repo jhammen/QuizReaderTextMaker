@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Wed Oct 10 20:51:05 MDT 2012
+ * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
  * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
  * @generated */
 public class HTMLAnnotation extends Annotation {

@@ -43,8 +43,8 @@ import org.apache.uima.util.ProcessTrace;
 import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
+import org.quizreader.textmaker.uima.types.FileAnnotation;
 import org.quizreader.textmaker.uima.types.HTMLAnnotation;
-import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 
 public class HTMLOutputWriter extends CasConsumer_ImplBase {
 
@@ -82,7 +82,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 		JCas jcas = cas.getJCas();
 		String documentText = cas.getDocumentText();
 
-		AnnotationIndex<Annotation> fileIndex = jcas.getAnnotationIndex(OutputFileAnnotation.type);
+		AnnotationIndex<Annotation> fileIndex = jcas.getAnnotationIndex(FileAnnotation.type);
 		AnnotationIndex<Annotation> defIndex = jcas.getAnnotationIndex(DefinitionAnnotation.type);
 		AnnotationIndex<Annotation> markupIndex = jcas.getAnnotationIndex(HTMLAnnotation.type);
 
@@ -90,7 +90,11 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 
 		for (Annotation anno : fileIndex) {
 
-			OutputFileAnnotation fileAnno = (OutputFileAnnotation) anno;
+			FileAnnotation fileAnno = (FileAnnotation) anno;
+
+			if (!fileAnno.getOutput()) {
+				continue;
+			}
 
 			FSIterator<Annotation> defAnnoIterator = defIndex.subiterator(fileAnno);
 			Annotation defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
@@ -139,7 +143,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			parser.setInputHTML(htmlBuilder.toString());
 			String html = parser.parse(null).toHtml();
 			// print to file: file name from annotation, folder from param
-			File outputFile = new File(outputDir, fileAnno.getFilePath());
+			File outputFile = new File(outputDir, fileAnno.getFileName());
 			PrintStream printStream = new PrintStream(outputFile, "UTF-8");
 			printStream.print(html);
 			printStream.close();

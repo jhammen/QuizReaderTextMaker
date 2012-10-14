@@ -27,25 +27,30 @@
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>
         <featureDescription>
-          <name>Excerpt</name>
+          <name>excerpt</name>
           <description/>
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
       </features>
     </typeDescription>
     <typeDescription>
-      <name>org.quizreader.textmaker.uima.types.OutputFileAnnotation</name>
+      <name>org.quizreader.textmaker.uima.types.FileAnnotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
       <features>
         <featureDescription>
-          <name>FilePath</name>
+          <name>fileName</name>
           <description/>
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
+        <featureDescription>
+          <name>output</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
       </features>
     </typeDescription>
-      <typeDescription>
+    <typeDescription>
       <name>org.quizreader.textmaker.uima.types.HTMLAnnotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>

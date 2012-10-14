@@ -22,7 +22,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-public class Entry {
+public class Entry implements Comparable<Entry> {
 
 	private String word;
 	private List<Definition> definitions;
@@ -43,6 +43,11 @@ public class Entry {
 
 	public void setDefinitions(List<Definition> definitions) {
 		this.definitions = definitions;
+	}
+
+	@Override
+	public int compareTo(Entry arg0) {
+		return word.compareTo(word);
 	}
 
 }

@@ -10,7 +10,11 @@
     <vendor/>
     <configurationParameters/>
     <configurationParameterSettings/>
-    <typeSystemDescription/>
+    <typeSystemDescription>
+      <imports>
+        <import location="QuizReaderTypes.xml"/>
+      </imports>
+    </typeSystemDescription>
     <typePriorities/>
     <fsIndexCollection/>
     <capabilities>

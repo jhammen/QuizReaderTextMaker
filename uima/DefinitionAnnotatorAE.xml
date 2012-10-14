@@ -20,7 +20,7 @@
       <nameValuePair>
         <name>wiktionaryXml</name>
         <value>
-          <string>data/fr20111016.xml</string>
+          <string>data/enwikt_latest_french.xml</string>
         </value>
       </nameValuePair>
     </configurationParameterSettings>

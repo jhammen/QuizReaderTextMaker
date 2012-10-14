@@ -22,18 +22,19 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.quizreader.textmaker.wiktionary.Entry;
+
 @XmlRootElement(name = "definitions")
 public class DefinitionFile {
+	private List<Entry> entries;
 
-	private List<Paragraph> paragraphs;
-
-	@XmlElement(name = "paragraph")
-	public List<Paragraph> getParagraphs() {
-		return paragraphs;
+	@XmlElement(name = "entry")
+	public List<Entry> getEntries() {
+		return entries;
 	}
 
-	public void setParagraphs(List<Paragraph> paragraphs) {
-		this.paragraphs = paragraphs;
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
 }

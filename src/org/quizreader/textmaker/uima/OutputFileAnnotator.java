@@ -28,8 +28,8 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.jcas.tcas.DocumentAnnotation;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.quizreader.textmaker.uima.types.FileAnnotation;
 import org.quizreader.textmaker.uima.types.HTMLAnnotation;
-import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 
 public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 
@@ -51,7 +51,7 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		// Logger logger = getContext().getLogger();
 
-		OutputFileAnnotation sectionAnno = null;
+		FileAnnotation sectionAnno = null;
 		AnnotationIndex<Annotation> markupIndex = aJCas.getAnnotationIndex(HTMLAnnotation.type);
 		// create break list
 		for (Annotation anno : markupIndex) {
@@ -61,9 +61,10 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 					sectionAnno.setEnd(anno.getBegin() - 1);
 					sectionAnno.addToIndexes();
 				}
-				sectionAnno = new OutputFileAnnotation(aJCas);
+				sectionAnno = new FileAnnotation(aJCas);
+				sectionAnno.setOutput(true);
 				sectionAnno.setBegin(anno.getBegin());
-				sectionAnno.setFilePath("part" + fileCounter++ + ".html");
+				sectionAnno.setFileName("part" + fileCounter++ + ".html");
 			}
 		}
 		if (sectionAnno != null) {

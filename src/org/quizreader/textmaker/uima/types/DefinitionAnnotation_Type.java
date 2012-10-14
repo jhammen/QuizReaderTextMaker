@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Tue Oct 09 21:26:19 MDT 2012
+ * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
  * @generated */
 public class DefinitionAnnotation_Type extends Annotation_Type {
   /** @generated */
@@ -45,20 +45,20 @@ public class DefinitionAnnotation_Type extends Annotation_Type {
   public final static boolean featOkTst = JCasRegistry.getFeatOkTst("org.quizreader.textmaker.uima.types.DefinitionAnnotation");
  
   /** @generated */
-  final Feature casFeat_Excerpt;
+  final Feature casFeat_excerpt;
   /** @generated */
-  final int     casFeatCode_Excerpt;
+  final int     casFeatCode_excerpt;
   /** @generated */ 
   public String getExcerpt(int addr) {
-        if (featOkTst && casFeat_Excerpt == null)
-      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
-    return ll_cas.ll_getStringValue(addr, casFeatCode_Excerpt);
+        if (featOkTst && casFeat_excerpt == null)
+      jcas.throwFeatMissing("excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    return ll_cas.ll_getStringValue(addr, casFeatCode_excerpt);
   }
   /** @generated */    
   public void setExcerpt(int addr, String v) {
-        if (featOkTst && casFeat_Excerpt == null)
-      jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
-    ll_cas.ll_setStringValue(addr, casFeatCode_Excerpt, v);}
+        if (featOkTst && casFeat_excerpt == null)
+      jcas.throwFeatMissing("excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    ll_cas.ll_setStringValue(addr, casFeatCode_excerpt, v);}
     
   
 
@@ -71,8 +71,8 @@ public class DefinitionAnnotation_Type extends Annotation_Type {
     casImpl.getFSClassRegistry().addGeneratorForType((TypeImpl)this.casType, getFSGenerator());
 
  
-    casFeat_Excerpt = jcas.getRequiredFeatureDE(casType, "Excerpt", "uima.cas.String", featOkTst);
-    casFeatCode_Excerpt  = (null == casFeat_Excerpt) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_Excerpt).getCode();
+    casFeat_excerpt = jcas.getRequiredFeatureDE(casType, "excerpt", "uima.cas.String", featOkTst);
+    casFeatCode_excerpt  = (null == casFeat_excerpt) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_excerpt).getCode();
 
   }
 }

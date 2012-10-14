@@ -17,6 +17,7 @@
 
 package org.quizreader.textmaker.uima;
 
+import java.io.File;
 import java.util.Stack;
 
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
@@ -28,6 +29,7 @@ import org.htmlparser.Parser;
 import org.htmlparser.Tag;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.visitors.TextExtractingVisitor;
+import org.quizreader.textmaker.uima.types.FileAnnotation;
 import org.quizreader.textmaker.uima.types.HTMLAnnotation;
 
 public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
@@ -35,6 +37,7 @@ public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
 	public void process(final JCas aJCas) {
 		Logger logger = getContext().getLogger();
 		try {
+			// parse html and create new plainTextView
 			String documentText = aJCas.getDocumentText();
 			Parser parser = new Parser(documentText);
 			JCas plainTextView = aJCas.createView("textView");
@@ -42,6 +45,12 @@ public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
 			parser.visitAllNodesWith(visitor);
 			String textInPage = visitor.getExtractedText();
 			plainTextView.setDocumentText(textInPage);
+			// add a file annotation to the new view
+			File inputFile = UimaUtil.getInputFile(aJCas);
+			FileAnnotation fileAnno = new FileAnnotation(plainTextView);
+			fileAnno.setFileName(inputFile.getName());
+			fileAnno.setOutput(false);
+			fileAnno.addToIndexes();
 		} catch (ParserException e) {
 			logger.log(Level.SEVERE, e.toString());
 			e.printStackTrace();

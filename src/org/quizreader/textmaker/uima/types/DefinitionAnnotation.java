@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Tue Oct 09 21:26:19 MDT 2012
+ * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
  * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
  * @generated */
 public class DefinitionAnnotation extends Annotation {
@@ -68,16 +68,16 @@ public class DefinitionAnnotation extends Annotation {
   /** getter for Excerpt - gets 
    * @generated */
   public String getExcerpt() {
-    if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_Excerpt == null)
-      jcasType.jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
-    return jcasType.ll_cas.ll_getStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_Excerpt);}
+    if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_excerpt == null)
+      jcasType.jcas.throwFeatMissing("excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    return jcasType.ll_cas.ll_getStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_excerpt);}
     
   /** setter for Excerpt - sets  
    * @generated */
   public void setExcerpt(String v) {
-    if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_Excerpt == null)
-      jcasType.jcas.throwFeatMissing("Excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
-    jcasType.ll_cas.ll_setStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_Excerpt, v);}    
+    if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_excerpt == null)
+      jcasType.jcas.throwFeatMissing("excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    jcasType.ll_cas.ll_setStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_excerpt, v);}    
   }
 
     
