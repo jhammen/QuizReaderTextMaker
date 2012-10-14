@@ -6,17 +6,17 @@
     <delegateAnalysisEngine key="DefinitionAnnotatorAE">
       <import location="DefinitionAnnotatorAE.xml"/>
     </delegateAnalysisEngine>
-    <delegateAnalysisEngine key="HTMLOutputWriter">
-      <import location="HTMLOutputWriter.xml"/>
+    <delegateAnalysisEngine key="HTMLInputAnnotatorAE">
+      <import location="HTMLInputAnnotatorAE.xml"/>
     </delegateAnalysisEngine>
     <delegateAnalysisEngine key="FrenchUnicodeTokenizer-AE">
       <import name="tddts.preprocessing.ae.FrenchUnicodeTokenizer-AE"/>
     </delegateAnalysisEngine>
-    <delegateAnalysisEngine key="HTMLInputAnnotatorAE">
-      <import location="HTMLInputAnnotatorAE.xml"/>
-    </delegateAnalysisEngine>
     <delegateAnalysisEngine key="OutputFileAE">
       <import location="OutputFileAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="HTMLOutputWriter">
+      <import location="HTMLOutputWriter.xml"/>
     </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
@@ -31,6 +31,8 @@
         <node>HTMLInputAnnotatorAE</node>
         <node>FrenchUnicodeTokenizer-AE</node>
         <node>DefinitionAnnotatorAE</node>
+        <node>OutputFileAE</node>
+        <node>HTMLOutputWriter</node>
       </fixedFlow>
     </flowConstraints>
     <typePriorities/>

@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 public class UimaUtil {
 
-	public File getInputFile(JCas jcas) {
+	public static File getInputFile(JCas jcas) {
 		FSIterator<Annotation> it = jcas.getAnnotationIndex(SourceDocumentInformation.type).iterator();
 		if (it.hasNext()) {
 			SourceDocumentInformation fileLoc = (SourceDocumentInformation) it.next();

@@ -11,6 +11,12 @@
         <multiValued>true</multiValued>
         <mandatory>true</mandatory>
       </configurationParameter>
+      <configurationParameter>
+        <name>outputFolder</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
     </configurationParameters>
     <configurationParameterSettings>
       <nameValuePair>
@@ -23,6 +29,12 @@
             <string>h2</string>
             <string>h3</string>
           </array>
+        </value>
+      </nameValuePair>
+      <nameValuePair>
+        <name>outputFolder</name>
+        <value>
+          <string>../QuizReaderTexts/_output</string>
         </value>
       </nameValuePair>
     </configurationParameterSettings>

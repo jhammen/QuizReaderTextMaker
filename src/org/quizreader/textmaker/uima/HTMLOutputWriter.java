@@ -17,10 +17,11 @@
 
 package org.quizreader.textmaker.uima;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,6 +40,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceProcessException;
 import org.apache.uima.util.ProcessTrace;
+import org.htmlparser.Parser;
+import org.htmlparser.util.ParserException;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
 import org.quizreader.textmaker.uima.types.HTMLAnnotation;
 import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
@@ -46,8 +49,10 @@ import org.quizreader.textmaker.uima.types.OutputFileAnnotation;
 public class HTMLOutputWriter extends CasConsumer_ImplBase {
 
 	private static final String CONFIG_PARAM_PASS_TAGS = "passTags";
+	private static final String CONFIG_PARAM_OUPUT_DIR = "outputFolder";
 
 	private Set<String> passTags;
+	private String outputDir;
 
 	@Override
 	public void initialize() throws ResourceInitializationException {
@@ -57,6 +62,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			for (String tag : (String[]) getConfigParameterValue(CONFIG_PARAM_PASS_TAGS)) {
 				passTags.add(tag.toLowerCase());
 			}
+			outputDir = (String) getConfigParameterValue(CONFIG_PARAM_OUPUT_DIR);
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}
@@ -66,16 +72,12 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 	public void processCas(CAS cas) throws ResourceProcessException {
 		try {
 			process(cas);
-		} catch (IOException ex) {
-			throw new ResourceProcessException(ex);
-		} catch (CASException ex) {
-			throw new ResourceProcessException(ex);
-		} catch (JAXBException ex) {
+		} catch (Exception ex) {
 			throw new ResourceProcessException(ex);
 		}
 	}
 
-	private void process(CAS cas) throws CASException, FileNotFoundException, JAXBException {
+	private void process(CAS cas) throws CASException, FileNotFoundException, JAXBException, ParserException, UnsupportedEncodingException {
 
 		JCas jcas = cas.getJCas();
 		String documentText = cas.getDocumentText();
@@ -93,19 +95,11 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			FSIterator<Annotation> defAnnoIterator = defIndex.subiterator(fileAnno);
 			Annotation defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
 
-			FSIterator<Annotation> markupAnnoIterator = markupIndex.subiterator(fileAnno);
-			Annotation markupAnno = markupAnnoIterator.next();
+			FSIterator<Annotation> htmlAnnoIterator = markupIndex.subiterator(fileAnno);
+			Annotation markupAnno = htmlAnnoIterator.next();
 
-			// start new file
-			OutputStream nullStream = new OutputStream() {
-				public void write(int b) {
-				}
-			};
-			PrintStream htmlStream = new PrintStream(nullStream);
-			if (fileAnno.getFilePath().endsWith("33.html")) {
-				htmlStream = new PrintStream(fileAnno.getFilePath());
-			}
-			htmlStream.print("<html><body>");
+			StringBuilder htmlBuilder = new StringBuilder();
+			htmlBuilder.append("<html><body>");
 
 			Map<Integer, Stack<String>> endTags = new HashMap<Integer, Stack<String>>();
 
@@ -114,32 +108,41 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 				Stack<String> stack = endTags.get(i);
 				if (stack != null) {
 					while (!stack.empty()) {
-						htmlStream.print("</" + stack.pop() + ">");
+						htmlBuilder.append("</" + stack.pop() + ">");
 					}
 				}
 				// print out markup tags at this location (pass tags only)
 				while (markupAnno != null && markupAnno.getBegin() == i) {
 					String tag = ((HTMLAnnotation) markupAnno).getName();
-					if (passTags.contains(tag.toLowerCase())) {
-						htmlStream.print("<" + tag + ">");
-						addEndTag(endTags, tag, markupAnno.getEnd());
+					String lowerTag = tag.toLowerCase();
+					if (passTags.contains(lowerTag)) {
+						htmlBuilder.append("<" + lowerTag + ">");
+						addEndTag(endTags, lowerTag, markupAnno.getEnd());
 					}
 					else {
 						suppressTags.add(tag);
 					}
-					markupAnno = markupAnnoIterator.hasNext() ? markupAnnoIterator.next() : null;
+					markupAnno = htmlAnnoIterator.hasNext() ? htmlAnnoIterator.next() : null;
 				}
 				// print out definition tags
 				while (defAnno != null && defAnno.getBegin() == i) {
-					htmlStream.print("<a>");
+					htmlBuilder.append("<a>");
 					addEndTag(endTags, "a", defAnno.getEnd());
 					defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
 				}
-				htmlStream.print(documentText.charAt(i));
+				htmlBuilder.append(documentText.charAt(i));
 			}
 
-			htmlStream.println("</body></html>");
-			htmlStream.close();
+			htmlBuilder.append("</body></html>");
+
+			Parser parser = new Parser();
+			parser.setInputHTML(htmlBuilder.toString());
+			String html = parser.parse(null).toHtml();
+			// print to file: file name from annotation, folder from param
+			File outputFile = new File(outputDir, fileAnno.getFilePath());
+			PrintStream printStream = new PrintStream(outputFile, "UTF-8");
+			printStream.print(html);
+			printStream.close();
 		}
 
 		for (String suppressedTag : suppressTags) {
