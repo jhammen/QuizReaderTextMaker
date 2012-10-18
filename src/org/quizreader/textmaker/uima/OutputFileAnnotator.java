@@ -64,7 +64,8 @@ public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 				sectionAnno = new FileAnnotation(aJCas);
 				sectionAnno.setOutput(true);
 				sectionAnno.setBegin(anno.getBegin());
-				sectionAnno.setFileName("part" + fileCounter++ + ".html");
+				String countSuffix = String.format("%03d", fileCounter++);
+				sectionAnno.setFileName("part" + countSuffix + ".html");
 			}
 		}
 		if (sectionAnno != null) {

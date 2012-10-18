@@ -103,7 +103,12 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 		}
 		DefinitionFile definitionFile = new DefinitionFile();
 		definitionFile.setEntries(new ArrayList<Entry>(entries.values()));
-		definitionFiles.put(inFileName + ".xml", definitionFile);
+		definitionFiles.put(outputFileName(inFileName), definitionFile);
+	}
+
+	private String outputFileName(String inFileName) {
+		int dotIndex = inFileName.lastIndexOf(".html");
+		return inFileName.substring(0, dotIndex) + ".def.xml";
 	}
 
 	private String getInputFileName(JCas jcas) {
