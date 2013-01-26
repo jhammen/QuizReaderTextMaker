@@ -103,7 +103,9 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			Annotation markupAnno = htmlAnnoIterator.next();
 
 			StringBuilder htmlBuilder = new StringBuilder();
-			htmlBuilder.append("<html><body>");
+			htmlBuilder.append("<html><head>");
+			htmlBuilder.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+			htmlBuilder.append("</head><body>");
 
 			Map<Integer, Stack<String>> endTags = new HashMap<Integer, Stack<String>>();
 
