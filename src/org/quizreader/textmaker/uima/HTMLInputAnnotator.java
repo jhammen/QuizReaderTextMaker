@@ -39,7 +39,8 @@ public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
 		try {
 			// parse html and create new plainTextView
 			String documentText = aJCas.getDocumentText();
-			Parser parser = new Parser(documentText);
+			Parser parser = new Parser();
+			parser.setInputHTML(documentText);
 			JCas plainTextView = aJCas.createView("textView");
 			TextExtractingVisitor visitor = new HTMLVisitor(plainTextView);
 			parser.visitAllNodesWith(visitor);
