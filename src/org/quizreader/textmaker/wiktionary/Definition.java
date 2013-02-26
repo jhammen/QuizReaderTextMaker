@@ -24,6 +24,7 @@ public class Definition {
 
 	private String type;
 	private String text;
+	private String root;
 
 	@XmlAttribute
 	public String getType() {
@@ -32,6 +33,15 @@ public class Definition {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	@XmlAttribute
+	public String getRoot() {
+		return root;
+	}
+
+	public void setRoot(String root) {
+		this.root = root;
 	}
 
 	@XmlValue

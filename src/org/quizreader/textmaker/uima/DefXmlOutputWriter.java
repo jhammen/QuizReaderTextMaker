@@ -44,6 +44,7 @@ import org.apache.uima.util.ProcessTrace;
 import org.quizreader.textmaker.DefinitionFile;
 import org.quizreader.textmaker.uima.types.FileAnnotation;
 import org.quizreader.textmaker.uima.types.HTMLAnnotation;
+import org.quizreader.textmaker.wiktionary.Definition;
 import org.quizreader.textmaker.wiktionary.Entry;
 import org.quizreader.textmaker.wiktionary.WiktionaryManager;
 
@@ -91,13 +92,26 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 		for (Annotation anno : htmlIndex) {
 			HTMLAnnotation htmlAnno = (HTMLAnnotation) anno;
 			if ("A".equals(htmlAnno.getName().toUpperCase())) {
-				// increment count of this word
 				String word = anno.getCoveredText();
 				Entry entry = wiktionary.getEntry(word);
-				if (entry != null && !entries.containsKey(word)) {
-					Integer count = defCount.get(word);
-					defCount.put(word, count == null ? 1 : count + 1);
-					entries.put(word, entry);
+				entries.put(word, entry);
+				// increment count of this word
+				Integer count = defCount.get(word);
+				defCount.put(word, count == null ? 1 : count + 1);
+				// check for roots
+				for (Definition definition : entry.getDefinitions()) {
+					String roots = definition.getRoot();
+					if (roots != null && roots.length() > 0) {
+						for (String root : roots.split(",")) {
+							Entry rootEntry = wiktionary.getEntry(root);
+							if (rootEntry != null) {
+								entries.put(root, rootEntry);
+							}
+							else {
+								System.err.println("missing root entry: " + root);
+							}
+						}
+					}
 				}
 			}
 		}

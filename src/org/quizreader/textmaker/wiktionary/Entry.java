@@ -17,6 +17,7 @@
 
 package org.quizreader.textmaker.wiktionary;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -25,7 +26,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class Entry implements Comparable<Entry> {
 
 	private String word;
-	private List<Definition> definitions;
+	private List<Definition> definitions = new ArrayList<Definition>();
 
 	@XmlAttribute(name = "title")
 	public String getWord() {
