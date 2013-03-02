@@ -17,6 +17,8 @@
 
 package org.quizreader.textmaker.uima;
 
+import java.util.List;
+
 import org.apache.uima.TokenAnnotation;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
@@ -27,6 +29,7 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
+import org.quizreader.textmaker.wiktionary.Definition;
 import org.quizreader.textmaker.wiktionary.Entry;
 import org.quizreader.textmaker.wiktionary.WiktionaryManager;
 
@@ -66,8 +69,9 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 				DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
 				defAnno.setBegin(tok.getBegin());
 				defAnno.setEnd(tok.getEnd());
-				if (entry.getDefinitions() != null) {
-					defAnno.setExcerpt(entry.getDefinitions().get(0).getText());
+				List<Definition> definitions = entry.getDefinitions();
+				if (definitions != null && definitions.size() > 0) {
+					defAnno.setExcerpt(definitions.get(0).getText());
 				}
 				defAnno.addToIndexes();
 			}
