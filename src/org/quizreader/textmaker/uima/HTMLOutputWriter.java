@@ -107,7 +107,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			htmlBuilder.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
 			htmlBuilder.append("<link href=\"qr.css\" rel=\"stylesheet\"/>");
 			htmlBuilder.append("<script src=\"qr.js\"></script>");
-			htmlBuilder.append("</head><body>");
+			htmlBuilder.append("</head><body><div id=\"content\">");
 
 			Map<Integer, Stack<String>> endTags = new HashMap<Integer, Stack<String>>();
 
@@ -141,7 +141,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 				htmlBuilder.append(documentText.charAt(i));
 			}
 
-			htmlBuilder.append("</body></html>");
+			htmlBuilder.append("</div></body></html>");
 
 			Parser parser = new Parser();
 			parser.setInputHTML(htmlBuilder.toString());
