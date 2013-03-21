@@ -93,10 +93,13 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 			HTMLAnnotation htmlAnno = (HTMLAnnotation) anno;
 			if ("A".equals(htmlAnno.getName().toUpperCase())) {
 				String word = anno.getCoveredText();
-				// if we haven't seen this word yet for this file
-				if (!entries.containsKey(word)) {
-					// find entry
-					Entry entry = wiktionary.getEntry(word);
+				// find entry
+				Entry entry = wiktionary.getEntry(word);
+				if (entry == null) {
+					word = word.toLowerCase();
+					entry = wiktionary.getEntry(word);
+				}
+				if (entry != null && !entries.containsKey(word)) {
 					entries.put(word, entry);
 					// increment count of this word
 					Integer count = fileCount.get(word);

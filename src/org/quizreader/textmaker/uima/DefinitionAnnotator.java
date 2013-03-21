@@ -65,13 +65,19 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 			String coveredText = tok.getCoveredText();
 
 			Entry entry = wiktionary.getEntry(coveredText);
-			if (entry != null) {
+			if (coveredText.matches("[a-zA-ZÀ-ÿœ]+") || entry != null) {
 				DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
 				defAnno.setBegin(tok.getBegin());
 				defAnno.setEnd(tok.getEnd());
-				List<Definition> definitions = entry.getDefinitions();
-				if (definitions != null && definitions.size() > 0) {
-					defAnno.setExcerpt(definitions.get(0).getText());
+
+				if (entry == null) {
+					entry = wiktionary.getEntry(coveredText.toLowerCase());
+				}
+				if (entry != null) {
+					List<Definition> definitions = entry.getDefinitions();
+					if (definitions != null && definitions.size() > 0) {
+						defAnno.setExcerpt(definitions.get(0).getText());
+					}
 				}
 				defAnno.addToIndexes();
 			}

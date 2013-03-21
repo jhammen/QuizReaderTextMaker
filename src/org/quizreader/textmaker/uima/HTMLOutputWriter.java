@@ -133,7 +133,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 					markupAnno = htmlAnnoIterator.hasNext() ? htmlAnnoIterator.next() : null;
 				}
 				// print out definition tags
-				while (defAnno != null && defAnno.getBegin() == i) {
+				if (defAnno != null && defAnno.getBegin() == i) {
 					htmlBuilder.append("<a>");
 					addEndTag(endTags, "a", defAnno.getEnd());
 					defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
