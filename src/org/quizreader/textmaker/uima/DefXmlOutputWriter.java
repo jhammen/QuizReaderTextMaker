@@ -54,7 +54,7 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 	private static final String CONFIG_PARAM_WIKTIONARY_XML = "wiktionaryXml";
 
 	private WiktionaryManager wiktionary = new WiktionaryManager();
-	private Map<String, Integer> defCount;
+	private Map<String, Integer> fileCount;
 	private Map<String, DefinitionFile> definitionFiles;
 	private String outputDir;
 
@@ -66,7 +66,7 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 			String wiktionaryXml = (String) getConfigParameterValue(CONFIG_PARAM_WIKTIONARY_XML);
 			wiktionary.loadXML(wiktionaryXml);
 			definitionFiles = new HashMap<String, DefinitionFile>();
-			defCount = new HashMap<String, Integer>();
+			fileCount = new HashMap<String, Integer>();
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}
@@ -93,22 +93,26 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 			HTMLAnnotation htmlAnno = (HTMLAnnotation) anno;
 			if ("A".equals(htmlAnno.getName().toUpperCase())) {
 				String word = anno.getCoveredText();
-				Entry entry = wiktionary.getEntry(word);
-				entries.put(word, entry);
-				// increment count of this word
-				Integer count = defCount.get(word);
-				defCount.put(word, count == null ? 1 : count + 1);
-				// check for roots
-				for (Definition definition : entry.getDefinitions()) {
-					String roots = definition.getRoot();
-					if (roots != null && roots.length() > 0) {
-						for (String root : roots.split(",")) {
-							Entry rootEntry = wiktionary.getEntry(root);
-							if (rootEntry != null) {
-								entries.put(root, rootEntry);
-							}
-							else {
-								System.err.println("missing root entry: " + root);
+				// if we haven't seen this word yet for this file
+				if (!entries.containsKey(word)) {
+					// find entry
+					Entry entry = wiktionary.getEntry(word);
+					entries.put(word, entry);
+					// increment count of this word
+					Integer count = fileCount.get(word);
+					fileCount.put(word, count == null ? 1 : count + 1);
+					// check for roots
+					for (Definition definition : entry.getDefinitions()) {
+						String roots = definition.getRoot();
+						if (roots != null && roots.length() > 0) {
+							for (String root : roots.split(",")) {
+								Entry rootEntry = wiktionary.getEntry(root);
+								if (rootEntry != null) {
+									entries.put(root, rootEntry);
+								}
+								else {
+									System.err.println("missing root entry: " + root);
+								}
 							}
 						}
 					}
@@ -136,19 +140,18 @@ public class DefXmlOutputWriter extends CasConsumer_ImplBase {
 	@Override
 	public void collectionProcessComplete(ProcessTrace arg0) throws ResourceProcessException, IOException {
 		try {
-			// make a list of words common to half or more of files
+			// make a list of words common to multiple files
 			List<String> commonWords = new ArrayList<String>();
-			int halfOrSo = definitionFiles.size() / 2;
-			for (String word : defCount.keySet()) {
-				if (defCount.get(word) > halfOrSo) {
+			for (String word : fileCount.keySet()) {
+				if (fileCount.get(word) > 1) {
 					commonWords.add(word);
 				}
 			}
-			System.out.println("found " + commonWords.size() + " common words out of " + defCount.size());
+			System.out.println("found " + commonWords.size() + " common words out of " + fileCount.size());
 			// for each definition file we've created in memory
 			for (String filename : definitionFiles.keySet()) {
 				DefinitionFile definitionFile = definitionFiles.get(filename);
-				// remove common entires
+				// remove common entries
 				List<Entry> commonEntries = new ArrayList<Entry>();
 				for (Entry entry : definitionFile.getEntries()) {
 					if (commonWords.contains(entry.getWord())) {
