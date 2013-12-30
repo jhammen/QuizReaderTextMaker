@@ -4,5 +4,7 @@
         <dependency org="org.apache.uima" name="uimaj-document-annotation" rev="2.4.0"/>
         <dependency org="org.apache.uima" name="uimaj-tools" rev="2.4.0"/>
         <dependency org="org.htmlparser" name="htmlparser" rev="2.1"/>
+        <dependency org="org.apache.opennlp" name="opennlp-uima" rev="1.5.3"/>
+        <dependency org="de.tudarmstadt.ukp.dkpro.core" name="de.tudarmstadt.ukp.dkpro.core.stanfordnlp-gpl" rev="1.5.0"/>
     </dependencies>
 </ivy-module>
