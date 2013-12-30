@@ -21,6 +21,9 @@
       <capability>
         <inputs/>
         <outputs/>
+        <outputSofas>
+          <sofaName>textView</sofaName>
+        </outputSofas>
         <languagesSupported/>
       </capability>
     </capabilities>

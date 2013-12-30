@@ -37,8 +37,10 @@ public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
 	public void process(final JCas aJCas) {
 		Logger logger = getContext().getLogger();
 		try {
-			// parse html and create new plainTextView
-			String documentText = aJCas.getDocumentText();
+			// multi-view component - must explicitly grab initial view
+			JCas view = aJCas.getView("_InitialView");
+			// parse html and create new plainTextView			
+			String documentText = view.getDocumentText();
 			Parser parser = new Parser(documentText);
 			JCas plainTextView = aJCas.createView("textView");
 			TextExtractingVisitor visitor = new HTMLVisitor(plainTextView);
@@ -46,7 +48,7 @@ public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
 			String textInPage = visitor.getExtractedText();
 			plainTextView.setDocumentText(textInPage);
 			// add a file annotation to the new view
-			File inputFile = UimaUtil.getInputFile(aJCas);
+			File inputFile = UimaUtil.getInputFile(view);
 			FileAnnotation fileAnno = new FileAnnotation(plainTextView);
 			fileAnno.setFileName(inputFile.getName());
 			fileAnno.setOutput(false);
