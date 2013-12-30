@@ -103,7 +103,11 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			Annotation markupAnno = htmlAnnoIterator.next();
 
 			StringBuilder htmlBuilder = new StringBuilder();
-			htmlBuilder.append("<html><body>");
+			htmlBuilder.append("<html><head>");
+			htmlBuilder.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
+			htmlBuilder.append("<link href=\"qr.css\" rel=\"stylesheet\"/>");
+			htmlBuilder.append("<script src=\"qr.js\"></script>");
+			htmlBuilder.append("</head><body><div id=\"content\">");
 
 			Map<Integer, Stack<String>> endTags = new HashMap<Integer, Stack<String>>();
 
@@ -129,7 +133,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 					markupAnno = htmlAnnoIterator.hasNext() ? htmlAnnoIterator.next() : null;
 				}
 				// print out definition tags
-				while (defAnno != null && defAnno.getBegin() == i) {
+				if (defAnno != null && defAnno.getBegin() == i) {
 					htmlBuilder.append("<a>");
 					addEndTag(endTags, "a", defAnno.getEnd());
 					defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
@@ -137,7 +141,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 				htmlBuilder.append(documentText.charAt(i));
 			}
 
-			htmlBuilder.append("</body></html>");
+			htmlBuilder.append("</div></body></html>");
 
 			Parser parser = new Parser();
 			parser.setInputHTML(htmlBuilder.toString());
