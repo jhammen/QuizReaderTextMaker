@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+
 	<frameworkImplementation>org.apache.uima.java</frameworkImplementation>
 	<primitive>true</primitive>
 	<annotatorImplementationName>opennlp.uima.tokenize.Tokenizer</annotatorImplementationName>
 	<analysisEngineMetaData>
+
 		<name>Tokenizer</name>
 		<description/>
-		<version>${pom.version}</version>
-		<vendor>Apache Software Foundation</vendor>
 		<configurationParameters>
-			<configurationParameter>
-				<name>opennlp.uima.SentenceType</name>
-				<type>String</type>
-				<multiValued>false</multiValued>
-				<mandatory>true</mandatory>
-			</configurationParameter>
-			
 			<configurationParameter>
 				<name>opennlp.uima.TokenType</name>
 				<type>String</type>
 				<multiValued>false</multiValued>
 				<mandatory>true</mandatory>
 			</configurationParameter>
-			
+			<configurationParameter>
+				<name>opennlp.uima.SentenceType</name>
+				<type>String</type>
+				<multiValued>false</multiValued>
+				<mandatory>true</mandatory>
+			</configurationParameter>
+
 			<configurationParameter>
 				<name>opennlp.uima.tokenizer.IsAlphaNumericOptimization</name>
 				<type>String</type>
@@ -30,6 +29,7 @@
 				<mandatory>false</mandatory>
 			</configurationParameter>
 		</configurationParameters>
+
 		<configurationParameterSettings>
 			<nameValuePair>
 				<name>opennlp.uima.TokenType</name>
@@ -44,49 +44,47 @@
 				</value>
 			</nameValuePair>
 		</configurationParameterSettings>
-		
+
 		<typeSystemDescription>
 			<imports>
 				<import location="OpenNLPTypeSystem.xml"/>
 			</imports>
 		</typeSystemDescription>
-		
+
 		<typePriorities/>
-    <fsIndexCollection/>
-    <capabilities>
+		<fsIndexCollection/>
+		<capabilities>
 			<capability>
 				<inputs/>
 				<outputs>
-          <type allAnnotatorFeatures="true">opennlp.uima.Token</type>
-        </outputs>
-				<languagesSupported>
-					<language>en</language>
-				</languagesSupported>
+					<type allAnnotatorFeatures="true">opennlp.uima.Token</type>
+				</outputs>
+				<languagesSupported/>
 			</capability>
 		</capabilities>
 		<operationalProperties>
 			<modifiesCas>true</modifiesCas>
 			<multipleDeploymentAllowed>true</multipleDeploymentAllowed>
-		<outputsNewCASes>false</outputsNewCASes>
-    </operationalProperties>
+			<outputsNewCASes>false</outputsNewCASes>
+		</operationalProperties>
 	</analysisEngineMetaData>
-	
+
 	<externalResourceDependencies>
 		<externalResourceDependency>
 			<key>opennlp.uima.ModelName</key>
 			<description/>
-      <interfaceName>opennlp.uima.tokenize.TokenizerModelResource</interfaceName>
-		<optional>false</optional>
-    </externalResourceDependency>
+			<interfaceName>opennlp.uima.tokenize.TokenizerModelResource</interfaceName>
+			<optional>false</optional>
+		</externalResourceDependency>
 	</externalResourceDependencies>
-<resourceManagerConfiguration>
 
-		<externalResources>
+	<resourceManagerConfiguration>
+	<externalResources>
 			<externalResource>
 				<name>TokenModel</name>
 				<description/>
         <fileResourceSpecifier>
-					<fileUrl>file:models/da-token.bin</fileUrl>
+					<fileUrl>file:models/en-token.bin</fileUrl>
 				</fileResourceSpecifier>
 				<implementationName>opennlp.uima.tokenize.TokenizerModelResourceImpl</implementationName>
 			</externalResource>
@@ -99,4 +97,5 @@
 			</externalResourceBinding>
 		</externalResourceBindings>
 		</resourceManagerConfiguration>
+		
 </analysisEngineDescription>

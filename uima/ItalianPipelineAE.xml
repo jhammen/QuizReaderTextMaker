@@ -20,7 +20,7 @@
     </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
-    <name>DanishPipelineAE</name>
+    <name>ItalianPipelineAE</name>
     <description/>
     <version>1.0</version>
     <vendor/>
@@ -39,7 +39,7 @@
       <nameValuePair>
         <name>wiktionaryXml</name>
         <value>
-          <string>data/enwikt_latest_danish.xml</string>
+          <string>data/enwikt_latest_italian.xml</string>
         </value>
       </nameValuePair>
     </configurationParameterSettings>
@@ -60,12 +60,13 @@
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.HTMLAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.SentenceAnnotation</type>
         </outputs>
         <outputSofas>
           <sofaName>pipelineTextView</sofaName>
         </outputSofas>
         <languagesSupported>
-          <language>da</language>
+          <language>it</language>
         </languagesSupported>
       </capability>
     </capabilities>
@@ -82,7 +83,7 @@
 				<name>TokenModel</name>
 				<description/>
         <fileResourceSpecifier>
-					<fileUrl>file:models/da-token.bin</fileUrl>
+					<fileUrl>file:models/token-it-maxent.bin</fileUrl>
 				</fileResourceSpecifier>
 				<implementationName>opennlp.uima.tokenize.TokenizerModelResourceImpl</implementationName>
 			</externalResource>

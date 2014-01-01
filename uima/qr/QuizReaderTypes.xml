@@ -17,10 +17,12 @@
  along with QuizReader.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</description>
   <version>1.0</version>
   <vendor/>
-  <imports>
-    <import name="tddts.preprocessing.ts.words-TS"/>
-  </imports>
   <types>
+ 		<typeDescription>
+      <name>org.apache.uima.TokenAnnotation</name>
+      <description/>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+    </typeDescription>  
     <typeDescription>
       <name>org.quizreader.textmaker.uima.types.DefinitionAnnotation</name>
       <description/>
