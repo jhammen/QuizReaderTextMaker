@@ -22,7 +22,12 @@
       <name>org.apache.uima.TokenAnnotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
-    </typeDescription>  
+    </typeDescription>
+ 		<typeDescription>
+      <name>org.apache.uima.SentenceAnnotation</name>
+      <description/>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+    </typeDescription>    
     <typeDescription>
       <name>org.quizreader.textmaker.uima.types.DefinitionAnnotation</name>
       <description/>
