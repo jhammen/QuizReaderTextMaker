@@ -18,7 +18,7 @@
     <delegateAnalysisEngine key="OpenNLPTokenizer">
       <import location="opennlp/OpenNLPTokenizer.xml"/>
     </delegateAnalysisEngine>
-  <delegateAnalysisEngine key="OpenNLPSentenceDetector">
+		<delegateAnalysisEngine key="OpenNLPSentenceDetector">
       <import location="opennlp/OpenNLPSentenceDetector.xml"/>
     </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>

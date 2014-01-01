@@ -17,12 +17,17 @@
 
 package org.quizreader.textmaker.uima;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.uima.SentenceAnnotation;
 import org.apache.uima.TokenAnnotation;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
-import org.apache.uima.cas.FSIndex;
+import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -54,25 +59,46 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 		Logger logger = getContext().getLogger();
 		// String docText = aJCas.getDocumentText();
-		FSIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type);
+		AnnotationIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type);
 		if (tokenIndex.size() == 0) {
 			logger.log(Level.SEVERE, "No token annotations found! Was the document tokenised?");
 			System.err.println("No token annotations found! Was the document tokenised?");
 			return;
 		}
-		for (Annotation tok : tokenIndex) {
-			// TokenAnnotation anno = (TokenAnnotation) tok;
-			String coveredText = tok.getCoveredText();
 
-			Entry entry = wiktionary.getEntry(coveredText);
-			if (coveredText.matches("[a-zA-ZÀ-ÿœ]+") || entry != null) {
+		// map sentences by their start location
+		AnnotationIndex<Annotation> sentenceIndex = aJCas.getAnnotationIndex(SentenceAnnotation.type);
+		Map<Integer, Annotation> sentenceStart = new HashMap<Integer, Annotation>();
+		for (Annotation sentence : sentenceIndex) {
+			sentenceStart.put(sentence.getBegin(), sentence);
+		}
+
+		Map<String, Integer> missingWords = new HashMap<String, Integer>();
+
+		for (Annotation tok : tokenIndex) {
+
+			// TokenAnnotation anno = (TokenAnnotation) tok;
+			String word = tok.getCoveredText();
+
+			// attempt straight lookup
+			Entry entry = wiktionary.getEntry(word);
+
+			// sentence beginning: try lower case
+			if (entry == null && sentenceStart.containsKey(tok.getBegin())) {
+				entry = wiktionary.getEntry(word.toLowerCase());
+			}
+
+			// take note of missing words
+			if (entry == null && word.matches("[a-zA-ZÀ-ÿœ]+")) {
+				Integer count = missingWords.get(word);
+				missingWords.put(word, count == null ? 1 : count + 1);
+			}
+
+			if (entry != null) {
 				DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
 				defAnno.setBegin(tok.getBegin());
 				defAnno.setEnd(tok.getEnd());
 
-				if (entry == null) {
-					entry = wiktionary.getEntry(coveredText.toLowerCase());
-				}
 				if (entry != null) {
 					List<Definition> definitions = entry.getDefinitions();
 					if (definitions != null && definitions.size() > 0) {
@@ -80,6 +106,14 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 					}
 				}
 				defAnno.addToIndexes();
+			}
+		}
+
+		List<String> missing = new ArrayList<String>(missingWords.keySet());
+		Collections.sort(missing);
+		for (String word : missing) {
+			if (missingWords.get(word) > 1) {
+				System.out.println("missing: " + word + "\t" + missingWords.get(word));
 			}
 		}
 

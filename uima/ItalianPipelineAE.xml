@@ -18,6 +18,9 @@
     <delegateAnalysisEngine key="OpenNLPTokenizer">
       <import location="opennlp/OpenNLPTokenizer.xml"/>
     </delegateAnalysisEngine>
+		<delegateAnalysisEngine key="OpenNLPSentenceDetector">
+      <import location="opennlp/OpenNLPSentenceDetector.xml"/>
+    </delegateAnalysisEngine>    
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
     <name>ItalianPipelineAE</name>
@@ -47,6 +50,7 @@
       <fixedFlow>
         <node>HTMLInputAnnotatorAE</node>
         <node>OpenNLPTokenizer</node>
+        <node>OpenNLPSentenceDetector</node>
         <node>DefinitionAnnotatorAE</node>
         <node>OutputFileAE</node>
       </fixedFlow>
@@ -106,6 +110,10 @@
       <componentKey>OpenNLPTokenizer</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
+  	<sofaMapping>
+      <componentKey>OpenNLPSentenceDetector</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>  
     <sofaMapping>
       <componentKey>DefinitionAnnotatorAE</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
