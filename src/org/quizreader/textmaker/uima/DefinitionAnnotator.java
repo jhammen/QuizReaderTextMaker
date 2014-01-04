@@ -20,13 +20,16 @@ package org.quizreader.textmaker.uima;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.uima.SentenceAnnotation;
 import org.apache.uima.TokenAnnotation;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
+import org.apache.uima.cas.FSIterator;
 import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
@@ -55,6 +58,10 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 		}
 	}
 
+	private boolean isWord(String word) {
+		return word.matches("[a-zA-ZÀ-ÿœ]+");
+	}
+
 	public void process(JCas aJCas) {
 
 		Logger logger = getContext().getLogger();
@@ -68,9 +75,17 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 		// map sentences by their start location
 		AnnotationIndex<Annotation> sentenceIndex = aJCas.getAnnotationIndex(SentenceAnnotation.type);
-		Map<Integer, Annotation> sentenceStart = new HashMap<Integer, Annotation>();
+		// Map<Integer, Annotation> sentenceStart = new HashMap<Integer, Annotation>();
+		Set<Integer> sentenceStarts = new HashSet<Integer>();
 		for (Annotation sentence : sentenceIndex) {
-			sentenceStart.put(sentence.getBegin(), sentence);
+			FSIterator<Annotation> subiterator = tokenIndex.subiterator(sentence);
+			if (subiterator.hasNext()) {
+				Annotation tok = subiterator.next();
+				while (subiterator.hasNext() && !isWord(tok.getCoveredText())) {
+					tok = subiterator.next();
+				}
+				sentenceStarts.add(tok.getBegin());
+			}
 		}
 
 		Map<String, Integer> missingWords = new HashMap<String, Integer>();
@@ -84,12 +99,12 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 			Entry entry = wiktionary.getEntry(word);
 
 			// sentence beginning: try lower case
-			if (entry == null && sentenceStart.containsKey(tok.getBegin())) {
+			if (entry == null && sentenceStarts.contains(tok.getBegin())) {
 				entry = wiktionary.getEntry(word.toLowerCase());
 			}
 
 			// take note of missing words
-			if (entry == null && word.matches("[a-zA-ZÀ-ÿœ]+")) {
+			if (entry == null && isWord(word)) {
 				Integer count = missingWords.get(word);
 				missingWords.put(word, count == null ? 1 : count + 1);
 			}
@@ -118,4 +133,5 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 		}
 
 	}
+
 }
