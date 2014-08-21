@@ -17,7 +17,8 @@
 
 package org.quizreader.textmaker.wiktionary;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,24 +26,40 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-public class WiktionaryManager {
+import org.apache.uima.resource.DataResource;
+import org.apache.uima.resource.ResourceInitializationException;
+import org.apache.uima.resource.SharedResourceObject;
+import org.quizreader.textmaker.uima.WiktionaryResource;
+
+public class WiktionaryResourceImpl implements WiktionaryResource, SharedResourceObject {
 
 	private Map<String, Entry> entries;
 
-	public void loadXML(String path) throws JAXBException {
+	@Override
+	public void load(DataResource aData) throws ResourceInitializationException {
+		try {
+			load(aData.getInputStream());
+		} catch (JAXBException e) {
+			throw new ResourceInitializationException(e);
+		} catch (IOException e) {
+			throw new ResourceInitializationException(e);
+		}
+	}
+
+	public void load(InputStream inputStream) throws JAXBException {
 		entries = new HashMap<String, Entry>();
-		File xmlFile = new File(path);
 		JAXBContext jaxbContext = JAXBContext.newInstance(Wiktionary.class);
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		Wiktionary wikt = (Wiktionary) jaxbUnmarshaller.unmarshal(xmlFile);
+		Wiktionary wikt = (Wiktionary) jaxbUnmarshaller.unmarshal(inputStream);
 		for (Entry entry : wikt.getEntries()) {
 			entries.put(entry.getWord(), entry);
 		}
 		System.out.println(entries.size() + " wiktionary entries loaded");
 	}
 
+	@Override
 	public Entry getEntry(String word) {
-		return entries.get(word);
+		return entries.get(word);		
 	}
 
 }

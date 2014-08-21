@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
- * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
+ * Updated by JCasGen Thu Aug 21 11:44:29 MDT 2014
+ * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/qr/QuizReaderTypes.xml
  * @generated */
 public class HTMLAnnotation extends Annotation {
   /** @generated
@@ -54,10 +54,13 @@ public class HTMLAnnotation extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class HTMLAnnotation extends Annotation {
   //* Feature: name
 
   /** getter for name - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getName() {
     if (HTMLAnnotation_Type.featOkTst && ((HTMLAnnotation_Type)jcasType).casFeat_name == null)
       jcasType.jcas.throwFeatMissing("name", "org.quizreader.textmaker.uima.types.HTMLAnnotation");
     return jcasType.ll_cas.ll_getStringValue(addr, ((HTMLAnnotation_Type)jcasType).casFeatCode_name);}
     
   /** setter for name - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setName(String v) {
     if (HTMLAnnotation_Type.featOkTst && ((HTMLAnnotation_Type)jcasType).casFeat_name == null)
       jcasType.jcas.throwFeatMissing("name", "org.quizreader.textmaker.uima.types.HTMLAnnotation");

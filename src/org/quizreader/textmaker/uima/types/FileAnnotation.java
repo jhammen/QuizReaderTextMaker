@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
- * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
+ * Updated by JCasGen Thu Aug 21 11:44:29 MDT 2014
+ * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/qr/QuizReaderTypes.xml
  * @generated */
 public class FileAnnotation extends Annotation {
   /** @generated
@@ -54,10 +54,13 @@ public class FileAnnotation extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
@@ -66,14 +69,18 @@ public class FileAnnotation extends Annotation {
   //* Feature: fileName
 
   /** getter for fileName - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public String getFileName() {
     if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_fileName == null)
       jcasType.jcas.throwFeatMissing("fileName", "org.quizreader.textmaker.uima.types.FileAnnotation");
     return jcasType.ll_cas.ll_getStringValue(addr, ((FileAnnotation_Type)jcasType).casFeatCode_fileName);}
     
   /** setter for fileName - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setFileName(String v) {
     if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_fileName == null)
       jcasType.jcas.throwFeatMissing("fileName", "org.quizreader.textmaker.uima.types.FileAnnotation");
@@ -84,14 +91,18 @@ public class FileAnnotation extends Annotation {
   //* Feature: output
 
   /** getter for output - gets 
-   * @generated */
+   * @generated
+   * @return value of the feature 
+   */
   public boolean getOutput() {
     if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_output == null)
       jcasType.jcas.throwFeatMissing("output", "org.quizreader.textmaker.uima.types.FileAnnotation");
     return jcasType.ll_cas.ll_getBooleanValue(addr, ((FileAnnotation_Type)jcasType).casFeatCode_output);}
     
   /** setter for output - sets  
-   * @generated */
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setOutput(boolean v) {
     if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_output == null)
       jcasType.jcas.throwFeatMissing("output", "org.quizreader.textmaker.uima.types.FileAnnotation");

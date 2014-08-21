@@ -17,44 +17,35 @@
 
 package org.quizreader.textmaker.uima;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.apache.uima.SentenceAnnotation;
 import org.apache.uima.TokenAnnotation;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
-import org.apache.uima.cas.FSIterator;
 import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
-import org.quizreader.textmaker.DefinitionSource;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
 import org.quizreader.textmaker.wiktionary.Definition;
 import org.quizreader.textmaker.wiktionary.Entry;
 
 public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
-	private static final String WIKTIONARY_XML_PATH_KEY = "wiktionaryXml";
-
-	DefinitionSource definitionSet;
-
+	private WiktionaryResource wiktionary;
+	
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
 		try {
-			String resourceFilePath = (String) aContext.getConfigParameterValue(WIKTIONARY_XML_PATH_KEY);
-			definitionSet = new DefinitionSource("es", resourceFilePath);
+			wiktionary = (WiktionaryResource) getContext().getResourceObject("Wiktionary");
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}
@@ -75,21 +66,6 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 			return;
 		}
 
-		// map sentences by their start location
-		AnnotationIndex<Annotation> sentenceIndex = aJCas.getAnnotationIndex(SentenceAnnotation.type);
-		// Map<Integer, Annotation> sentenceStart = new HashMap<Integer, Annotation>();
-		Set<Integer> sentenceStarts = new HashSet<Integer>();
-		for (Annotation sentence : sentenceIndex) {
-			FSIterator<Annotation> subiterator = tokenIndex.subiterator(sentence);
-			if (subiterator.hasNext()) {
-				Annotation tok = subiterator.next();
-				while (subiterator.hasNext() && !isWord(tok.getCoveredText())) {
-					tok = subiterator.next();
-				}
-				sentenceStarts.add(tok.getBegin());
-			}
-		}
-
 		Map<String, Integer> missingWords = new HashMap<String, Integer>();
 
 		for (Annotation tok : tokenIndex) {
@@ -101,36 +77,39 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 				continue;
 			}
 
-			try {
-				// attempt straight lookup
-				Entry entry = definitionSet.getEntry(word);
+			// attempt straight lookup
+			Entry entry = wiktionary.getEntry(word);
 
-				// sentence beginning: try lower case
-				if (entry == null && sentenceStarts.contains(tok.getBegin())) {
-					entry = definitionSet.getEntry(word.toLowerCase());
-				}
+			// try lower case
+			if (entry == null) { // && startWords.contains(tok.getBegin())) {
+				entry = wiktionary.getEntry(word.toLowerCase());
+			}
 
-				// take note of missing words
-				if (entry == null && isWord(word)) {
-					Integer count = missingWords.get(word);
-					missingWords.put(word, count == null ? 1 : count + 1);
-				}
+			// take note of missing words
+			if (entry == null && isWord(word)) {
+				Integer count = missingWords.get(word);
+				missingWords.put(word, count == null ? 1 : count + 1);
+				entry = new Entry(); // blank entry
+			}
+
+			if (entry != null) {
+				DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
+				defAnno.setBegin(tok.getBegin());
+				defAnno.setEnd(tok.getEnd());
 
 				if (entry != null) {
-					DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
-					defAnno.setBegin(tok.getBegin());
-					defAnno.setEnd(tok.getEnd());
-
-					if (entry != null) {
-						List<Definition> definitions = entry.getDefinitions();
-						if (definitions != null && definitions.size() > 0) {
-							defAnno.setExcerpt(definitions.get(0).getText());
-						}
+					// is it the same word?
+					if(!word.equals(entry.getWord())) {
+						System.out.println("mapping " + word + " -> " + entry.getWord());
+						defAnno.setWord(entry.getWord());
 					}
-					defAnno.addToIndexes();
+					// add entry definitions to annotation
+					List<Definition> definitions = entry.getDefinitions();
+					if (definitions != null && definitions.size() > 0) {
+						defAnno.setExcerpt(definitions.get(0).getText());
+					}
 				}
-			} catch (IOException ex) {
-				throw new AnalysisEngineProcessException(ex);
+				defAnno.addToIndexes();
 			}
 		}
 
@@ -140,16 +119,6 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 			if (missingWords.get(word) > 1) {
 				System.out.println("missing: " + word + "\t" + missingWords.get(word));
 			}
-		}
-	}
-
-	@Override
-	public void collectionProcessComplete() throws AnalysisEngineProcessException {
-		super.collectionProcessComplete();
-		try {
-			definitionSet.writeUpdatedEntries();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 }

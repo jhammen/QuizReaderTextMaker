@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
+ * Updated by JCasGen Thu Aug 21 11:44:29 MDT 2014
  * @generated */
 public class DefinitionAnnotation_Type extends Annotation_Type {
   /** @generated */
@@ -61,6 +61,30 @@ public class DefinitionAnnotation_Type extends Annotation_Type {
     ll_cas.ll_setStringValue(addr, casFeatCode_excerpt, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_word;
+  /** @generated */
+  final int     casFeatCode_word;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public String getWord(int addr) {
+        if (featOkTst && casFeat_word == null)
+      jcas.throwFeatMissing("word", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    return ll_cas.ll_getStringValue(addr, casFeatCode_word);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setWord(int addr, String v) {
+        if (featOkTst && casFeat_word == null)
+      jcas.throwFeatMissing("word", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    ll_cas.ll_setStringValue(addr, casFeatCode_word, v);}
+    
+  
 
 
 
@@ -73,6 +97,10 @@ public class DefinitionAnnotation_Type extends Annotation_Type {
  
     casFeat_excerpt = jcas.getRequiredFeatureDE(casType, "excerpt", "uima.cas.String", featOkTst);
     casFeatCode_excerpt  = (null == casFeat_excerpt) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_excerpt).getCode();
+
+ 
+    casFeat_word = jcas.getRequiredFeatureDE(casType, "word", "uima.cas.String", featOkTst);
+    casFeatCode_word  = (null == casFeat_word) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_word).getCode();
 
   }
 }

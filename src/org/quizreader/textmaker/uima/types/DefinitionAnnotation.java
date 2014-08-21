@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sun Oct 14 09:28:34 MDT 2012
- * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/QuizReaderTypes.xml
+ * Updated by JCasGen Thu Aug 21 11:44:29 MDT 2014
+ * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/qr/QuizReaderTypes.xml
  * @generated */
 public class DefinitionAnnotation extends Annotation {
   /** @generated
@@ -54,30 +54,59 @@ public class DefinitionAnnotation extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
  
     
   //*--------------*
-  //* Feature: Excerpt
+  //* Feature: excerpt
 
-  /** getter for Excerpt - gets 
-   * @generated */
+  /** getter for excerpt - gets 
+   * @generated
+   * @return value of the feature 
+   */
   public String getExcerpt() {
     if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_excerpt == null)
       jcasType.jcas.throwFeatMissing("excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
     return jcasType.ll_cas.ll_getStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_excerpt);}
     
-  /** setter for Excerpt - sets  
-   * @generated */
+  /** setter for excerpt - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
   public void setExcerpt(String v) {
     if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_excerpt == null)
       jcasType.jcas.throwFeatMissing("excerpt", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
     jcasType.ll_cas.ll_setStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_excerpt, v);}    
+   
+    
+  //*--------------*
+  //* Feature: word
+
+  /** getter for word - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public String getWord() {
+    if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_word == null)
+      jcasType.jcas.throwFeatMissing("word", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    return jcasType.ll_cas.ll_getStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_word);}
+    
+  /** setter for word - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setWord(String v) {
+    if (DefinitionAnnotation_Type.featOkTst && ((DefinitionAnnotation_Type)jcasType).casFeat_word == null)
+      jcasType.jcas.throwFeatMissing("word", "org.quizreader.textmaker.uima.types.DefinitionAnnotation");
+    jcasType.ll_cas.ll_setStringValue(addr, ((DefinitionAnnotation_Type)jcasType).casFeatCode_word, v);}    
   }
 
     

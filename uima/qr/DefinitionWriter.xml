@@ -2,13 +2,20 @@
 <analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
   <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
   <primitive>true</primitive>
-  <annotatorImplementationName>org.quizreader.textmaker.uima.DefinitionAnnotator</annotatorImplementationName>
+  <annotatorImplementationName>org.quizreader.textmaker.uima.DefinitionWriter</annotatorImplementationName>
   <analysisEngineMetaData>
-    <name>WikiAnnotatorAE</name>
+    <name>DefinitionWriter</name>
     <description/>
     <version>1.0</version>
     <vendor/>
-    <configurationParameters/>
+    <configurationParameters>
+      <configurationParameter>
+        <name>definitionPath</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+      </configurationParameter>
+    </configurationParameters>
     <configurationParameterSettings/>
     <typeSystemDescription>
       <imports>
@@ -25,7 +32,7 @@
       </capability>
     </capabilities>
     <operationalProperties>
-      <modifiesCas>true</modifiesCas>
+      <modifiesCas>false</modifiesCas>
       <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
       <outputsNewCASes>false</outputsNewCASes>
     </operationalProperties>

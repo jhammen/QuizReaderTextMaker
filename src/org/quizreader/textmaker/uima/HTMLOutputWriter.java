@@ -30,6 +30,7 @@ import java.util.Stack;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.uima.SentenceAnnotation;
 import org.apache.uima.cas.CAS;
 import org.apache.uima.cas.CASException;
 import org.apache.uima.cas.FSIterator;
@@ -77,12 +78,14 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 		}
 	}
 
-	private void process(CAS cas) throws CASException, FileNotFoundException, JAXBException, ParserException, UnsupportedEncodingException {
+	private void process(CAS cas) throws CASException, FileNotFoundException, JAXBException, ParserException,
+			UnsupportedEncodingException {
 
 		JCas jcas = cas.getJCas();
 		String documentText = cas.getDocumentText();
 
 		AnnotationIndex<Annotation> fileIndex = jcas.getAnnotationIndex(FileAnnotation.type);
+		AnnotationIndex<Annotation> sentenceIndex = jcas.getAnnotationIndex(SentenceAnnotation.type);
 		AnnotationIndex<Annotation> defIndex = jcas.getAnnotationIndex(DefinitionAnnotation.type);
 		AnnotationIndex<Annotation> markupIndex = jcas.getAnnotationIndex(HTMLAnnotation.type);
 
@@ -96,6 +99,9 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 				continue;
 			}
 
+			FSIterator<Annotation> sentenceAnnoIterator = sentenceIndex.subiterator(fileAnno);
+			Annotation sentenceAnno = sentenceAnnoIterator.hasNext() ? sentenceAnnoIterator.next() : null;
+
 			FSIterator<Annotation> defAnnoIterator = defIndex.subiterator(fileAnno);
 			Annotation defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
 
@@ -103,11 +109,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			Annotation markupAnno = htmlAnnoIterator.next();
 
 			StringBuilder htmlBuilder = new StringBuilder();
-			htmlBuilder.append("<html><head>");
-			htmlBuilder.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
-			htmlBuilder.append("<link href=\"qr.css\" rel=\"stylesheet\"/>");
-			htmlBuilder.append("<script src=\"qr.js\"></script>");
-			htmlBuilder.append("</head><body><div id=\"content\">");
+			htmlBuilder.append("<!-- license information here -->");
 
 			Map<Integer, Stack<String>> endTags = new HashMap<Integer, Stack<String>>();
 
@@ -132,16 +134,26 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 					}
 					markupAnno = htmlAnnoIterator.hasNext() ? htmlAnnoIterator.next() : null;
 				}
+				// print out span tags for sentences
+				if (sentenceAnno != null && sentenceAnno.getBegin() == i) {
+					htmlBuilder.append("<span>");
+					addEndTag(endTags, "span", sentenceAnno.getEnd());
+					sentenceAnno = sentenceAnnoIterator.hasNext() ? sentenceAnnoIterator.next() : null;
+				}
 				// print out definition tags
 				if (defAnno != null && defAnno.getBegin() == i) {
-					htmlBuilder.append("<a>");
+					String word = ((DefinitionAnnotation) defAnno).getWord();
+					if (word != null) {
+						htmlBuilder.append("<a data-word=\"" + word + "\">");
+					}
+					else {
+						htmlBuilder.append("<a>");
+					}
 					addEndTag(endTags, "a", defAnno.getEnd());
 					defAnno = defAnnoIterator.hasNext() ? defAnnoIterator.next() : null;
 				}
 				htmlBuilder.append(documentText.charAt(i));
 			}
-
-			htmlBuilder.append("</div></body></html>");
 
 			Parser parser = new Parser();
 			parser.setInputHTML(htmlBuilder.toString());

@@ -28,13 +28,14 @@
             <string>b</string>
             <string>h2</string>
             <string>h3</string>
+            <string>h4</string>
           </array>
         </value>
       </nameValuePair>
       <nameValuePair>
         <name>outputFolder</name>
         <value>
-          <string>../QuizReaderTexts/_output</string>
+          <string>../QuizReaderSpace/output</string>
         </value>
       </nameValuePair>
     </configurationParameterSettings>

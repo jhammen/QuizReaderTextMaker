@@ -15,6 +15,9 @@
     <delegateAnalysisEngine key="HTMLOutputWriter">
       <import location="qr/HTMLOutputWriter.xml"/>
     </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="DefinitionWriter">
+      <import location="qr/DefinitionWriter.xml"/>
+    </delegateAnalysisEngine>    
     <delegateAnalysisEngine key="OpenNLPTokenizer">
       <import location="opennlp/OpenNLPTokenizer.xml"/>
     </delegateAnalysisEngine>
@@ -29,20 +32,37 @@
     <vendor/>
     <configurationParameters searchStrategy="language_fallback">
       <configurationParameter>
-        <name>wiktionaryXml</name>
+        <name>splitTags</name>
+        <type>String</type>
+        <multiValued>true</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>OutputFileAE/splitTags</parameter>
+        </overrides>
+      </configurationParameter>
+    <configurationParameter>
+        <name>definitionPath</name>
         <type>String</type>
         <multiValued>false</multiValued>
         <mandatory>true</mandatory>
         <overrides>
-          <parameter>DefinitionAnnotatorAE/wiktionaryXml</parameter>
+          <parameter>DefinitionWriter/definitionPath</parameter>
         </overrides>
       </configurationParameter>
     </configurationParameters>
     <configurationParameterSettings>
       <nameValuePair>
-        <name>wiktionaryXml</name>
+        <name>splitTags</name>
         <value>
-          <string>data/enwikt_latest_spanish.xml</string>
+          <array>
+            <string>h4</string>
+          </array>
+        </value>
+      </nameValuePair>
+    <nameValuePair>
+        <name>definitionPath</name>
+        <value>
+          <string>../QuizReaderEnglish/es/def/</string>
         </value>
       </nameValuePair>
     </configurationParameterSettings>
@@ -53,6 +73,8 @@
         <node>OpenNLPSentenceDetector</node>
         <node>DefinitionAnnotatorAE</node>
         <node>OutputFileAE</node>
+        <node>DefinitionWriter</node>
+      <node>HTMLOutputWriter</node>
       </fixedFlow>
     </flowConstraints>
     <typePriorities/>
@@ -62,6 +84,7 @@
         <inputs/>
         <outputs>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.FileAnnotation</type>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.HTMLAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.SentenceAnnotation</type>
@@ -70,7 +93,7 @@
           <sofaName>pipelineTextView</sofaName>
         </outputSofas>
         <languagesSupported>
-          <language>it</language>
+          <language>es</language>
         </languagesSupported>
       </capability>
     </capabilities>
@@ -91,12 +114,28 @@
 				</fileResourceSpecifier>
 				<implementationName>opennlp.uima.tokenize.TokenizerModelResourceImpl</implementationName>
 			</externalResource>
+			<externalResource>
+				<name>Wiktionary</name>
+				<description/>
+        <fileResourceSpecifier>
+					<fileUrl>file:data/enwikt_latest_spanish.xml</fileUrl>
+				</fileResourceSpecifier>
+				<implementationName>org.quizreader.textmaker.wiktionary.WiktionaryResourceImpl</implementationName>
+			</externalResource>			
 		</externalResources>
 		
 	<externalResourceBindings>
 			<externalResourceBinding>
         <key>OpenNLPTokenizer/opennlp.uima.ModelName</key>
         <resourceName>TokenModel</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>DefinitionAnnotatorAE/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>DefinitionWriter/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
       </externalResourceBinding>
     </externalResourceBindings>
 	</resourceManagerConfiguration>
@@ -122,6 +161,10 @@
       <componentKey>OutputFileAE</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
+    <sofaMapping>
+      <componentKey>DefinitionWriter</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>    
     <sofaMapping>
       <componentKey>HTMLOutputWriter</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>

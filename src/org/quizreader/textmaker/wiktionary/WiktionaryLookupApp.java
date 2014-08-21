@@ -21,6 +21,7 @@ import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -28,7 +29,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class WiktionaryLookupApp {
-	WiktionaryManager wiktionary = new WiktionaryManager();
+	WiktionaryResourceImpl wiktionary = new WiktionaryResourceImpl();
 
 	public static void main(String[] args) throws Exception {
 		new WiktionaryLookupApp().run(args[0]);
@@ -36,7 +37,9 @@ public class WiktionaryLookupApp {
 
 	public void run(String path) throws Exception {
 
-		wiktionary.loadXML(path);
+		FileInputStream fis = new FileInputStream(path);
+		wiktionary.load(fis);
+		fis.close();
 
 		final JFrame jFrame = new JFrame();
 		jFrame.setLayout(new GridBagLayout());
