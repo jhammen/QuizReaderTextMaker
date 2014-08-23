@@ -13,7 +13,7 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
-import org.quizreader.textmaker.wiktionary.Entry;
+import org.quizreader.textmaker.wiktionary.model.Entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;

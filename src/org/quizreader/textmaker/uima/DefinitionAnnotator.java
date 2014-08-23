@@ -34,8 +34,8 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
-import org.quizreader.textmaker.wiktionary.Definition;
-import org.quizreader.textmaker.wiktionary.Entry;
+import org.quizreader.textmaker.wiktionary.model.Definition;
+import org.quizreader.textmaker.wiktionary.model.Entry;
 
 public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 

@@ -28,6 +28,9 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.quizreader.textmaker.wiktionary.model.Definition;
+import org.quizreader.textmaker.wiktionary.model.Entry;
+
 public class WiktionaryLookupApp {
 	WiktionaryResourceImpl wiktionary = new WiktionaryResourceImpl();
 
@@ -56,13 +59,12 @@ public class WiktionaryLookupApp {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String word = lookupField.getText();
-				jTextArea.setText("");
 				Entry entry = wiktionary.getEntry(word);
 				if (entry == null) {
 					jTextArea.setText("No definitions found");
 				}
 				else {
-					jTextArea.setText(jTextArea.getText() + "\n* " + entry);
+					jTextArea.setText(printEntry(entry));
 				}
 				jFrame.pack();
 			}
@@ -70,7 +72,22 @@ public class WiktionaryLookupApp {
 		jFrame.add(lookupButton, new GBC(1, 0));
 		jFrame.pack();
 		jFrame.setVisible(true);
-
+	}
+	
+	public String printEntry(Entry entry) {
+		StringBuffer ret = new StringBuffer();
+		ret.append(entry.getWord() + "\n\n");
+		for(Definition def: entry.getDefinitions()) {
+			ret.append("* ");
+			ret.append(def.getType());
+			ret.append(" ");
+			ret.append(def.getText());
+			if(def.getRoot() != null) {
+				ret.append(" [" + def.getRoot() + "]");
+			}
+			ret.append("\n");
+		}
+		return ret.toString();
 	}
 
 }

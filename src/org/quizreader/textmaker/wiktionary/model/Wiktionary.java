@@ -15,20 +15,19 @@
  along with QuizReader.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.quizreader.textmaker;
+package org.quizreader.textmaker.wiktionary.model;
 
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.quizreader.textmaker.wiktionary.Entry;
+@XmlRootElement(name = "wikt")
+public class Wiktionary {
 
-@XmlRootElement(name = "definitions")
-public class DefinitionFile {
 	private List<Entry> entries;
 
-	@XmlElement(name = "entry")
+	@XmlElement(name = "page")
 	public List<Entry> getEntries() {
 		return entries;
 	}
@@ -36,5 +35,4 @@ public class DefinitionFile {
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
 	}
-
 }

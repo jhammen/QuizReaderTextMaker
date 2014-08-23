@@ -15,7 +15,7 @@
  along with QuizReader.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.quizreader.textmaker.wiktionary;
+package org.quizreader.textmaker.wiktionary.model;
 
 import java.util.ArrayList;
 import java.util.List;

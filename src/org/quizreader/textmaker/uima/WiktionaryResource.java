@@ -1,6 +1,6 @@
 package org.quizreader.textmaker.uima;
 
-import org.quizreader.textmaker.wiktionary.Entry;
+import org.quizreader.textmaker.wiktionary.model.Entry;
 
 public interface WiktionaryResource {
 	

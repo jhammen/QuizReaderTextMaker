@@ -30,6 +30,8 @@ import org.apache.uima.resource.DataResource;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.SharedResourceObject;
 import org.quizreader.textmaker.uima.WiktionaryResource;
+import org.quizreader.textmaker.wiktionary.model.Entry;
+import org.quizreader.textmaker.wiktionary.model.Wiktionary;
 
 public class WiktionaryResourceImpl implements WiktionaryResource, SharedResourceObject {
 
