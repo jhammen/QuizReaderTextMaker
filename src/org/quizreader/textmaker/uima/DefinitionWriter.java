@@ -22,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class DefinitionWriter extends JCasAnnotator_ImplBase {
 
 	private static final String CONFIG_PARAM_DEF_PATH = "definitionPath";
-	
+
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private WiktionaryResource wiktionary;
 	private String definitionPath;
@@ -33,7 +33,7 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		try {
 			wiktionary = (WiktionaryResource) getContext().getResourceObject("Wiktionary");
-			definitionPath = (String) aContext.getConfigParameterValue(CONFIG_PARAM_DEF_PATH);		
+			definitionPath = (String) aContext.getConfigParameterValue(CONFIG_PARAM_DEF_PATH);
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}
@@ -42,7 +42,7 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		AnnotationIndex<Annotation> defIndex = aJCas.getAnnotationIndex(DefinitionAnnotation.type);
-		Set<String> entries = new HashSet<String>();		
+		Set<String> entries = new HashSet<String>();
 		try {
 			for (Annotation anno : defIndex) {
 				String word = ((DefinitionAnnotation) anno).getWord();
@@ -50,8 +50,15 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 					word = anno.getCoveredText();
 				}
 				if (!entries.contains(word)) {
-					writeDefinition(word);
+					Entry entry = wiktionary.getEntry(word);
+					writeDefinition(word, entry);
 					entries.add(word);
+					String root = getRoot(entry);
+					if (root != null && !entries.contains(root)) {
+						Entry rootEntry = wiktionary.getEntry(root);
+						writeDefinition(root, rootEntry);
+						entries.add(root);
+					}
 				}
 			}
 		} catch (IOException e) {
@@ -59,22 +66,29 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 		}
 	}
 
+	private String getRoot(Entry entry) {
+		if(entry == null || entry.getDefinitions().size() == 0) {
+			return null;
+		}
+		return entry.getDefinitions().get(0).getRoot();
+	}
+
 	private String path(String word) {
 		return word.length() == 1 ? word : word.substring(0, 2);
 	}
 
 	// TODO: write definitions only
-	private void writeDefinition(String word) throws IOException {
+	private void writeDefinition(String word, Entry entry) throws IOException {
 		File file = new File(definitionPath + path(word), word + ".json");
 		if (!file.exists()) {
+			System.out.println("writing file: " + file.getName());
 			final ObjectWriter w = objectMapper.writer();
-			Entry entry = wiktionary.getEntry(word);
-			if(entry == null) {
+			if (entry == null) {
 				entry = new Entry();
 				entry.setWord(word);
 			}
 			file.getParentFile().mkdirs();
 			w.writeValue(file, entry);
-		}		
+		}
 	}
 }

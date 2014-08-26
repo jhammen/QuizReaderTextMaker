@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.JAXBException;
 
@@ -19,9 +24,14 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 public class DefinitionUpdater {
 
 	private WiktionaryResourceImpl dictionary = new WiktionaryResourceImpl();
+
 	private ObjectMapper objectMapper = new ObjectMapper();
-	private Set<String> missingWords;
+	private List<String> missingWords;
 	int changedWords;
+	int totalWords;
+
+	private Pattern templatePattern = Pattern.compile("(\\[template\\|[^\\|]+\\|)");
+	private Set<String> templates;
 
 	public static void main(String[] args) throws JAXBException, IOException {
 		new DefinitionUpdater().run(args[0], args[1], args.length > 2);
@@ -29,11 +39,13 @@ public class DefinitionUpdater {
 	}
 
 	private void run(String definitionPath, String dictionaryPath, boolean write) throws JAXBException, IOException {
-		if(write) {
+		if (write) {
 			System.out.println("WARNING: set to overwrite files! cancel now if you don't want that");
 		}
 		changedWords = 0;
-		missingWords = new HashSet<String>();
+		totalWords = 0;
+		templates = new HashSet<String>();
+		missingWords = new ArrayList<String>();
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		FileInputStream fis = new FileInputStream(dictionaryPath);
 		dictionary.load(fis);
@@ -42,9 +54,15 @@ public class DefinitionUpdater {
 		System.out.println(changedWords + " changed words");
 		// show missing words
 		System.out.println(missingWords.size() + " missing words:");
-		for(String word: missingWords) {
+		Collections.sort(missingWords);
+		for (String word : missingWords) {
 			System.out.println(word);
 		}
+		System.out.println(templates.size() + " templates found:");
+		for (String template : templates) {
+			System.out.println(template);
+		}
+		System.out.println(totalWords + " total definition files");
 	}
 
 	private void checkFolder(File folder, boolean write) {
@@ -62,7 +80,7 @@ public class DefinitionUpdater {
 			}
 		});
 		final ObjectWriter w = objectMapper.writer();
-		for (File entry : entryFiles) {
+		for (File entry : entryFiles) {			
 			try {
 				final Entry fileEntry = objectMapper.readValue(entry, Entry.class);
 				final Entry dictEntry = dictionary.getEntry(fileEntry.getWord());
@@ -74,10 +92,15 @@ public class DefinitionUpdater {
 					System.out.println("********************************* " + fileEntry.getWord());
 					System.out.println(w.writeValueAsString(fileEntry));
 					System.out.println(w.writeValueAsString(dictEntry));
-					if(write) {
-						w.writeValue(entry, dictEntry);						
+					if (write) {
+						w.writeValue(entry, dictEntry);
 					}
 				}
+				final List<String> fileTemplates = checkForTemplates(fileEntry);
+				if (fileTemplates != null) {
+					templates.addAll(fileTemplates);
+				}
+				totalWords++;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -102,10 +125,17 @@ public class DefinitionUpdater {
 		return false;
 	}
 
-	private void checkForTemplate(final Entry fileEntry, Definition def) {
-		if (def.getText().matches(".*\\[template\\|.*")) {
-			System.out.println(fileEntry.getWord() + " has template: " + def.getText());
+	private List<String> checkForTemplates(final Entry fileEntry) {
+		List<String> templates = null;
+		for (Definition def : fileEntry.getDefinitions()) {
+			Matcher matcher = templatePattern.matcher(def.getText());
+			if (matcher.find()) {
+				if (templates == null) {
+					templates = new ArrayList<String>();
+				}
+				templates.add(matcher.group());
+			}
 		}
+		return templates;
 	}
-
 }
