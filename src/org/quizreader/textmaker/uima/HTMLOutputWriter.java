@@ -109,7 +109,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 			Annotation markupAnno = htmlAnnoIterator.next();
 
 			StringBuilder htmlBuilder = new StringBuilder();
-			htmlBuilder.append("<!-- license information here -->");
+			htmlBuilder.append("<!-- license information here -->\n");
 
 			Map<Integer, Stack<String>> endTags = new HashMap<Integer, Stack<String>>();
 

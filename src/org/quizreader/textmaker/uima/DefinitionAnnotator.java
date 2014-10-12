@@ -51,8 +51,8 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 		}
 	}
 
-	private boolean isWord(String word) {
-		return word.matches("[a-zA-ZÀ-ÿœ]+");
+	private boolean isLowercaseWord(String word) {
+		return word.matches("[a-zà-ÿœ]+");
 	}
 
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
@@ -73,7 +73,7 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 			String word = tok.getCoveredText();
 
 			// skip punctuation
-			if (word.matches("\\p{Punct}")) {
+			if (word.matches("\\p{Punct}+") || word.matches("[\r\n]+")) {
 				continue;
 			}
 
@@ -84,9 +84,19 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 			if (entry == null) { // && startWords.contains(tok.getBegin())) {
 				entry = wiktionary.getEntry(word.toLowerCase());
 			}
+			
+			// if ALL CAPS -> try First Letter Capitalized
+			if(entry == null && word.equals(word.toUpperCase())) {
+				entry = wiktionary.getEntry(word.charAt(0) + word.toLowerCase().substring(1));				
+			}
+			
+			// if hyphenated, try each side
+			if(entry == null && word.contains("-")) {
+				// TODO: try each side
+			}
 
 			// take note of missing words
-			if (entry == null && isWord(word)) {
+			if (entry == null && isLowercaseWord(word)) {
 				Integer count = missingWords.get(word);
 				missingWords.put(word, count == null ? 1 : count + 1);
 				entry = new Entry(); // blank entry

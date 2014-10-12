@@ -41,6 +41,8 @@ public class DefinitionUpdater {
 	private void run(String definitionPath, String dictionaryPath, boolean write) throws JAXBException, IOException {
 		if (write) {
 			System.out.println("WARNING: set to overwrite files! cancel now if you don't want that");
+		} else {
+			System.out.println("Running in simulation mode: will not overwrite files");
 		}
 		changedWords = 0;
 		totalWords = 0;
