@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>false</primitive>
+  <delegateAnalysisEngineSpecifiers>
+    <delegateAnalysisEngine key="DefinitionAnnotatorAE">
+      <import location="qr/DefinitionAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="HTMLInputAnnotatorAE">
+      <import location="qr/HTMLInputAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OutputFileAE">
+      <import location="qr/OutputFileAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="HTMLOutputWriter">
+      <import location="qr/HTMLOutputWriter.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="DefinitionWriter">
+      <import location="qr/DefinitionWriter.xml"/>
+    </delegateAnalysisEngine>    
+    <delegateAnalysisEngine key="OpenNLPTokenizer">
+      <import location="opennlp/OpenNLPTokenizer.xml"/>
+    </delegateAnalysisEngine>
+		<delegateAnalysisEngine key="OpenNLPSentenceDetector">
+      <import location="opennlp/OpenNLPSentenceDetector.xml"/>
+    </delegateAnalysisEngine>    
+  <delegateAnalysisEngine key="HTMLParagraphAnnotatorAE">
+      <import location="qr/HTMLParagraphAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+  </delegateAnalysisEngineSpecifiers>
+  <analysisEngineMetaData>
+    <name>GermanPipelineAE</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters searchStrategy="language_fallback">
+      <configurationParameter>
+        <name>splitTags</name>
+        <type>String</type>
+        <multiValued>true</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>OutputFileAE/splitTags</parameter>
+        </overrides>
+      </configurationParameter>
+    <configurationParameter>
+        <name>definitionPath</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>DefinitionWriter/definitionPath</parameter>
+        </overrides>
+      </configurationParameter>
+    <configurationParameter>
+        <name>opennlp.uima.ContainerType</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+        <overrides>
+          <parameter>OpenNLPSentenceDetector/opennlp.uima.ContainerType</parameter>
+        </overrides>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>splitTags</name>
+        <value>
+          <array>
+            <string>h2</string>
+          </array>
+        </value>
+      </nameValuePair>
+    <nameValuePair>
+        <name>definitionPath</name>
+        <value>
+          <string>../QuizReaderGerman/def/</string>
+        </value>
+      </nameValuePair>
+    <nameValuePair>
+        <name>opennlp.uima.ContainerType</name>
+        <value>
+          <string>org.quizreader.textmaker.uima.types.ParagraphAnnotation</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
+    <flowConstraints>
+      <fixedFlow>
+        <node>HTMLInputAnnotatorAE</node>
+        <node>HTMLParagraphAnnotatorAE</node>
+        <node>OpenNLPSentenceDetector</node>
+        <node>OpenNLPTokenizer</node>
+        <node>DefinitionAnnotatorAE</node>
+        <node>OutputFileAE</node>
+      <node>DefinitionWriter</node>
+      <node>HTMLOutputWriter</node>
+      </fixedFlow>
+    </flowConstraints>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.FileAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.HTMLAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.SentenceAnnotation</type>
+        <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.ParagraphAnnotation</type>
+        </outputs>
+        <outputSofas>
+          <sofaName>pipelineTextView</sofaName>
+        </outputSofas>
+        <languagesSupported>
+          <language>de</language>
+        </languagesSupported>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+      <outputsNewCASes>false</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+  
+  <resourceManagerConfiguration>
+  <externalResources>
+			<externalResource>
+				<name>TokenModel</name>
+				<description/>
+        <fileResourceSpecifier>
+					<fileUrl>file:models/de-token.bin</fileUrl>
+				</fileResourceSpecifier>
+				<implementationName>opennlp.uima.tokenize.TokenizerModelResourceImpl</implementationName>
+			</externalResource>
+			<externalResource>
+				<name>Wiktionary</name>
+				<description/>
+        <fileResourceSpecifier>
+					<fileUrl>file:data/enwikt_latest_german.xml</fileUrl>
+				</fileResourceSpecifier>
+				<implementationName>org.quizreader.textmaker.wiktionary.WiktionaryResourceImpl</implementationName>
+			</externalResource>			
+		<externalResource>
+        <name>SentenceModel</name>
+        <description/>
+        <fileResourceSpecifier>
+          <fileUrl>file:models/de-sent.bin</fileUrl>
+        </fileResourceSpecifier>
+        <implementationName>opennlp.uima.sentdetect.SentenceModelResourceImpl</implementationName>
+      </externalResource>
+    </externalResources>
+		
+	<externalResourceBindings>
+			<externalResourceBinding>
+        <key>OpenNLPTokenizer/opennlp.uima.ModelName</key>
+        <resourceName>TokenModel</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>DefinitionAnnotatorAE/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>DefinitionWriter/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>OpenNLPSentenceDetector/opennlp.uima.ModelName</key>
+        <resourceName>SentenceModel</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+	</resourceManagerConfiguration>
+  <sofaMappings>
+    <sofaMapping>
+      <componentKey>HTMLInputAnnotatorAE</componentKey>
+      <componentSofaName>textView</componentSofaName>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>OpenNLPTokenizer</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  	<sofaMapping>
+      <componentKey>OpenNLPSentenceDetector</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>  
+    <sofaMapping>
+      <componentKey>DefinitionAnnotatorAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>OutputFileAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>DefinitionWriter</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>    
+    <sofaMapping>
+      <componentKey>HTMLOutputWriter</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  <sofaMapping>
+      <componentKey>HTMLParagraphAnnotatorAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  </sofaMappings>
+</analysisEngineDescription>
