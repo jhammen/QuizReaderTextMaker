@@ -67,10 +67,14 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 	}
 
 	private String getRoot(Entry entry) {
-		if(entry == null || entry.getDefinitions().size() == 0) {
+		if (entry == null || entry.getDefinitions().size() == 0) {
 			return null;
 		}
-		return entry.getDefinitions().get(0).getRoot();
+		String root = entry.getDefinitions().get(0).getRoot();
+		if(root == null || root.length() == 0) {
+			return null;
+		}
+		return root;
 	}
 
 	private String path(String word) {
