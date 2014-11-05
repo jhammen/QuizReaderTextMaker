@@ -11,8 +11,8 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Sat Jun 23 21:44:44 MDT 2012
- * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/ParagraphAE.xml
+ * Updated by JCasGen Tue Nov 04 15:57:31 MST 2014
+ * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/qr/QuizReaderTypes.xml
  * @generated */
 public class ParagraphAnnotation extends Annotation {
   /** @generated
@@ -54,10 +54,13 @@ public class ParagraphAnnotation extends Annotation {
     readObject();
   }   
 
-  /** <!-- begin-user-doc -->
+  /** 
+   * <!-- begin-user-doc -->
     * Write your own initialization here
     * <!-- end-user-doc -->
-  @generated modifiable */
+  *
+   * @generated modifiable 
+   */
   private void readObject() {/*default - does nothing empty block */}
      
 }

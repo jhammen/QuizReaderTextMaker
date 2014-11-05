@@ -74,5 +74,10 @@
         </featureDescription>
       </features>
     </typeDescription>
+  <typeDescription>
+      <name>org.quizreader.textmaker.uima.types.ParagraphAnnotation</name>
+      <description/>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+    </typeDescription>
   </types>
 </typeSystemDescription>

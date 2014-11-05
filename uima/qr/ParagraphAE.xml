@@ -11,13 +11,9 @@
     <configurationParameters/>
     <configurationParameterSettings/>
     <typeSystemDescription>
-      <types>
-        <typeDescription>
-          <name>org.quizreader.textmaker.uima.types.ParagraphAnnotation</name>
-          <description/>
-          <supertypeName>uima.tcas.Annotation</supertypeName>
-        </typeDescription>
-      </types>
+      <imports>
+        <import location="QuizReaderTypes.xml"/>
+      </imports>
     </typeSystemDescription>
     <typePriorities/>
     <fsIndexCollection/>
