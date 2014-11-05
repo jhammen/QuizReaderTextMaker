@@ -13,7 +13,13 @@
 				<multiValued>false</multiValued>
 				<mandatory>true</mandatory>
 			</configurationParameter>		
-		</configurationParameters>
+		<configurationParameter>
+        <name>opennlp.uima.ContainerType</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+      </configurationParameter>
+    </configurationParameters>
 		<configurationParameterSettings>		
 			<nameValuePair>
 				<name>opennlp.uima.SentenceType</name>
@@ -50,8 +56,10 @@
 	<externalResourceDependencies>
 		<externalResourceDependency>
 			<key>opennlp.uima.ModelName</key>
-			<interfaceName>opennlp.uima.sentdetect.SentenceModelResource</interfaceName>
-		</externalResourceDependency>
+			<description/>
+      <interfaceName>opennlp.uima.sentdetect.SentenceModelResource</interfaceName>
+		<optional>false</optional>
+    </externalResourceDependency>
 	</externalResourceDependencies>
 		
 	<resourceManagerConfiguration>
