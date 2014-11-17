@@ -18,21 +18,123 @@
     <delegateAnalysisEngine key="HTMLOutputWriter">
       <import location="qr/HTMLOutputWriter.xml"/>
     </delegateAnalysisEngine>
+  <delegateAnalysisEngine key="DefinitionWriter">
+      <import location="qr/DefinitionWriter.xml"/>
+    </delegateAnalysisEngine>
+  <delegateAnalysisEngine key="OpenNLPSentenceDetector">
+      <import location="opennlp/OpenNLPSentenceDetector.xml"/>
+    </delegateAnalysisEngine>
+  <delegateAnalysisEngine key="HTMLParagraphAnnotatorAE">
+      <import location="qr/HTMLParagraphAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+  <delegateAnalysisEngine key="HTMLSentenceAnnotatorAE">
+      <import location="qr/HTMLSentenceAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
   </delegateAnalysisEngineSpecifiers>
   <analysisEngineMetaData>
     <name>FrenchPipelineAE</name>
     <description/>
     <version>1.0</version>
     <vendor/>
-    <configurationParameters searchStrategy="language_fallback"/>
-    <configurationParameterSettings/>
+    <configurationParameters searchStrategy="language_fallback">
+      <configurationParameter>
+        <name>definitionPath</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>DefinitionWriter/definitionPath</parameter>
+        </overrides>
+      </configurationParameter>
+      <configurationParameter>
+        <name>splitTags</name>
+        <type>String</type>
+        <multiValued>true</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>OutputFileAE/splitTags</parameter>
+        </overrides>
+      </configurationParameter>
+    <configurationParameter>
+        <name>outputFolder</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>HTMLOutputWriter/outputFolder</parameter>
+        </overrides>
+      </configurationParameter>
+    <configurationParameter>
+        <name>opennlp.uima.ContainerType</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>false</mandatory>
+        <overrides>
+          <parameter>OpenNLPSentenceDetector/opennlp.uima.ContainerType</parameter>
+        </overrides>
+      </configurationParameter>
+    <configurationParameter>
+        <name>passTags</name>
+        <type>String</type>
+        <multiValued>true</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>HTMLOutputWriter/passTags</parameter>
+        </overrides>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>definitionPath</name>
+        <value>
+          <string>../QuizReaderFrench/def/</string>
+        </value>
+      </nameValuePair>
+      <nameValuePair>
+        <name>splitTags</name>
+        <value>
+          <array>
+            <string>h2</string>
+          </array>
+        </value>
+      </nameValuePair>
+    <nameValuePair>
+        <name>outputFolder</name>
+        <value>
+          <string>../QuizReaderSpace/output</string>
+        </value>
+      </nameValuePair>
+    <nameValuePair>
+        <name>opennlp.uima.ContainerType</name>
+        <value>
+          <string>org.quizreader.textmaker.uima.types.ParagraphAnnotation</string>
+        </value>
+      </nameValuePair>
+    <nameValuePair>
+        <name>passTags</name>
+        <value>
+          <array>
+            <string>p</string>
+            <string>i</string>
+            <string>b</string>
+            <string>h2</string>
+            <string>h3</string>
+            <string>h4</string>
+            <string>br</string>
+          </array>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
     <flowConstraints>
       <fixedFlow>
         <node>HTMLInputAnnotatorAE</node>
+        <node>HTMLSentenceAnnotatorAE</node>
+        <node>HTMLParagraphAnnotatorAE</node>
+        <node>OpenNLPSentenceDetector</node>
         <node>FrenchUnicodeTokenizer-AE</node>
-        <node>DefinitionAnnotatorAE</node>
+      	<node>DefinitionAnnotatorAE</node>
         <node>OutputFileAE</node>
-        <node>HTMLOutputWriter</node>
+      <node>DefinitionWriter</node>
       </fixedFlow>
     </flowConstraints>
     <typePriorities/>
@@ -42,9 +144,11 @@
         <inputs/>
         <outputs>
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.FileAnnotation</type>          
           <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.HTMLAnnotation</type>
-          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.OutputFileAnnotation</type>
           <type allAnnotatorFeatures="true">org.apache.uima.TokenAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.SentenceAnnotation</type>
+        <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.ParagraphAnnotation</type>
         </outputs>
         <outputSofas>
           <sofaName>pipelineTextView</sofaName>
@@ -58,7 +162,28 @@
       <outputsNewCASes>false</outputsNewCASes>
     </operationalProperties>
   </analysisEngineMetaData>
-  <resourceManagerConfiguration/>
+  <resourceManagerConfiguration>
+    <externalResources>
+      <externalResource>
+				<name>Wiktionary</name>
+				<description/>
+        <fileResourceSpecifier>
+					<fileUrl>file:data/enwikt_latest_french.xml</fileUrl>
+				</fileResourceSpecifier>
+				<implementationName>org.quizreader.textmaker.wiktionary.WiktionaryResourceImpl</implementationName>
+			</externalResource>
+    </externalResources>
+  <externalResourceBindings>
+      <externalResourceBinding>
+        <key>DefinitionAnnotatorAE/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>DefinitionWriter/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+  </resourceManagerConfiguration>
   <sofaMappings>
     <sofaMapping>
       <componentKey>HTMLInputAnnotatorAE</componentKey>
@@ -79,6 +204,22 @@
     </sofaMapping>
     <sofaMapping>
       <componentKey>HTMLOutputWriter</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  <sofaMapping>
+      <componentKey>DefinitionWriter</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  <sofaMapping>
+      <componentKey>OpenNLPSentenceDetector</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  <sofaMapping>
+      <componentKey>HTMLParagraphAnnotatorAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  <sofaMapping>
+      <componentKey>HTMLSentenceAnnotatorAE</componentKey>
       <aggregateSofaName>pipelineTextView</aggregateSofaName>
     </sofaMapping>
   </sofaMappings>
