@@ -84,10 +84,9 @@ public class HTMLInputAnnotator extends JCasAnnotator_ImplBase {
 		public void visitEndTag(Tag tag) {
 			HTMLAnnotation htmlAnno = annoStack.pop();
 			while (!tag.getTagName().equals(htmlAnno.getName())) {
-				if (annoStack.empty()) {
-					System.err.println("error: no matching start tag for tag: " + tag);
-					return;
-				}
+				// tags with no end tags
+				htmlAnno.setEnd(htmlAnno.getBegin());
+				htmlAnno.addToIndexes();
 				htmlAnno = annoStack.pop();
 			}
 			htmlAnno.setEnd(getExtractedText().length());
