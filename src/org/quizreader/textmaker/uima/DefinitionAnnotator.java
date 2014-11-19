@@ -40,7 +40,7 @@ import org.quizreader.textmaker.wiktionary.model.Entry;
 public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 	private WiktionaryResource wiktionary;
-	
+
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
@@ -53,6 +53,22 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 	private boolean isLowercaseWord(String word) {
 		return word.matches("[a-zà-ÿœ]+");
+	}
+
+	private Entry lookupToken(String word) {
+		// attempt straight lookup
+		Entry entry = wiktionary.getEntry(word);
+
+		// try lower case
+		if (entry == null) { // && startWords.contains(tok.getBegin())) {
+			entry = wiktionary.getEntry(word.toLowerCase());
+		}
+
+		// if ALL CAPS -> try First Letter Capitalized
+		if (entry == null && word.length() > 1 && word.equals(word.toUpperCase())) {
+			entry = wiktionary.getEntry(word.charAt(0) + word.toLowerCase().substring(1));
+		}
+		return entry;
 	}
 
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
@@ -77,49 +93,27 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 				continue;
 			}
 
-			// attempt straight lookup
-			Entry entry = wiktionary.getEntry(word);
+			Entry entry = lookupToken(word);
 
-			// try lower case
-			if (entry == null) { // && startWords.contains(tok.getBegin())) {
-				entry = wiktionary.getEntry(word.toLowerCase());
+			if (entry != null) {
+				addDefinition(aJCas, word, entry, tok.getBegin(), tok.getEnd());
 			}
-			
-			// if ALL CAPS -> try First Letter Capitalized
-			if(entry == null && word.equals(word.toUpperCase())) {
-				entry = wiktionary.getEntry(word.charAt(0) + word.toLowerCase().substring(1));				
-			}
-			
-			// if hyphenated, try each side
-			if(entry == null && word.contains("-")) {
-				// TODO: try each side
-			}
-
 			// take note of missing words
-			if (entry == null && isLowercaseWord(word)) {
+			else if (isLowercaseWord(word)) {
 				Integer count = missingWords.get(word);
 				missingWords.put(word, count == null ? 1 : count + 1);
 				entry = new Entry(); // blank entry
 			}
-
-			if (entry != null) {
-				DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
-				defAnno.setBegin(tok.getBegin());
-				defAnno.setEnd(tok.getEnd());
-
-				if (entry != null) {
-					// is it the same word?
-					if(!word.equals(entry.getWord())) {
-						System.out.println("mapping " + word + " -> " + entry.getWord());
-						defAnno.setWord(entry.getWord());
+			// if hyphenated, try each component
+			else if (word.contains("-")) {
+				int begin = tok.getBegin();
+				for (String token : word.split("-")) {
+					entry = lookupToken(token);
+					if (entry != null) {
+						addDefinition(aJCas, word, entry, begin, begin + token.length());
 					}
-					// add entry definitions to annotation
-					List<Definition> definitions = entry.getDefinitions();
-					if (definitions != null && definitions.size() > 0) {
-						defAnno.setExcerpt(definitions.get(0).getText());
-					}
+					begin += token.length() + 1;
 				}
-				defAnno.addToIndexes();
 			}
 		}
 
@@ -130,5 +124,24 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 				System.out.println("missing: " + word + "\t" + missingWords.get(word));
 			}
 		}
+	}
+
+	private void addDefinition(JCas aJCas, String word, Entry entry, int begin, int end) {
+		DefinitionAnnotation defAnno = new DefinitionAnnotation(aJCas);
+		defAnno.setBegin(begin);
+		defAnno.setEnd(end);
+
+		if (entry != null) {
+			// is it the same word?
+			if (!word.equals(entry.getWord())) {
+				defAnno.setWord(entry.getWord());
+			}
+			// add entry definitions to annotation
+			List<Definition> definitions = entry.getDefinitions();
+			if (definitions != null && definitions.size() > 0) {
+				defAnno.setExcerpt(definitions.get(0).getText());
+			}
+		}
+		defAnno.addToIndexes();
 	}
 }
