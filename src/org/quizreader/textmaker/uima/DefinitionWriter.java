@@ -102,14 +102,13 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 	private void writeDefinition(String word, Entry entry) throws IOException {
 		File file = new File(definitionPath + path(word), word + ".json");
 		if (!file.exists()) {
-			System.out.println("writing file: " + file.getName());
 			final ObjectWriter w = objectMapper.writer();
 			if (entry == null) {
 				entry = new Entry();
-				entry.setWord(word);
 			}
 			file.getParentFile().mkdirs();
 			w.writeValue(file, entry);
+			System.out.println("writing file: " + file.getName());
 		}
 	}
 }

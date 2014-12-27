@@ -23,12 +23,16 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Entry implements Comparable<Entry> {
 
 	private String word;
 	private List<Definition> definitions = new ArrayList<Definition>();
+	private String source;
 
 	@XmlAttribute(name = "title")
+	@JsonIgnore
 	public String getWord() {
 		return word;
 	}
@@ -46,9 +50,16 @@ public class Entry implements Comparable<Entry> {
 		this.definitions = definitions;
 	}
 
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
+	}
+
 	@Override
 	public int compareTo(Entry arg0) {
 		return word.compareTo(word);
 	}
-
 }

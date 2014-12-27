@@ -54,6 +54,7 @@ public class WiktionaryResourceImpl implements WiktionaryResource, SharedResourc
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 		Wiktionary wikt = (Wiktionary) jaxbUnmarshaller.unmarshal(inputStream);
 		for (Entry entry : wikt.getEntries()) {
+			entry.setSource(wikt.getSource());
 			entries.put(entry.getWord(), entry);
 		}
 		System.out.println(entries.size() + " wiktionary entries loaded");
@@ -61,7 +62,7 @@ public class WiktionaryResourceImpl implements WiktionaryResource, SharedResourc
 
 	@Override
 	public Entry getEntry(String word) {
-		return entries.get(word);		
+		return entries.get(word);
 	}
 
 }

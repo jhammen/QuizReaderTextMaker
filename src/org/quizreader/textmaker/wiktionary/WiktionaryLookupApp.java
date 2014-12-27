@@ -62,8 +62,7 @@ public class WiktionaryLookupApp {
 				Entry entry = wiktionary.getEntry(word);
 				if (entry == null) {
 					jTextArea.setText("No definitions found");
-				}
-				else {
+				} else {
 					jTextArea.setText(printEntry(entry));
 				}
 				jFrame.pack();
@@ -73,20 +72,21 @@ public class WiktionaryLookupApp {
 		jFrame.pack();
 		jFrame.setVisible(true);
 	}
-	
+
 	public String printEntry(Entry entry) {
 		StringBuffer ret = new StringBuffer();
 		ret.append(entry.getWord() + "\n\n");
-		for(Definition def: entry.getDefinitions()) {
+		for (Definition def : entry.getDefinitions()) {
 			ret.append("* ");
 			ret.append(def.getType());
 			ret.append(" ");
 			ret.append(def.getText());
-			if(def.getRoot() != null) {
+			if (def.getRoot() != null) {
 				ret.append(" [" + def.getRoot() + "]");
 			}
 			ret.append("\n");
 		}
+		ret.append("\nsource: " + entry.getSource());
 		return ret.toString();
 	}
 

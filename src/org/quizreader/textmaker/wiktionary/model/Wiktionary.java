@@ -19,6 +19,7 @@ package org.quizreader.textmaker.wiktionary.model;
 
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -26,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Wiktionary {
 
 	private List<Entry> entries;
+	private String source;
 
 	@XmlElement(name = "page")
 	public List<Entry> getEntries() {
@@ -34,5 +36,14 @@ public class Wiktionary {
 
 	public void setEntries(List<Entry> entries) {
 		this.entries = entries;
+	}
+
+	@XmlAttribute
+	public String getSource() {
+		return source;
+	}
+
+	public void setSource(String source) {
+		this.source = source;
 	}
 }
