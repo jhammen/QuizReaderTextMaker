@@ -11,7 +11,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /** 
- * Updated by JCasGen Thu Aug 21 11:44:29 MDT 2014
+ * Updated by JCasGen Sat Dec 27 11:33:55 MST 2014
  * XML source: /home/joe/workspace/QuizReaderTextMaker/uima/qr/QuizReaderTypes.xml
  * @generated */
 public class FileAnnotation extends Annotation {
@@ -107,6 +107,28 @@ public class FileAnnotation extends Annotation {
     if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_output == null)
       jcasType.jcas.throwFeatMissing("output", "org.quizreader.textmaker.uima.types.FileAnnotation");
     jcasType.ll_cas.ll_setBooleanValue(addr, ((FileAnnotation_Type)jcasType).casFeatCode_output, v);}    
+   
+    
+  //*--------------*
+  //* Feature: withinRange
+
+  /** getter for withinRange - gets 
+   * @generated
+   * @return value of the feature 
+   */
+  public boolean getWithinRange() {
+    if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_withinRange == null)
+      jcasType.jcas.throwFeatMissing("withinRange", "org.quizreader.textmaker.uima.types.FileAnnotation");
+    return jcasType.ll_cas.ll_getBooleanValue(addr, ((FileAnnotation_Type)jcasType).casFeatCode_withinRange);}
+    
+  /** setter for withinRange - sets  
+   * @generated
+   * @param v value to set into the feature 
+   */
+  public void setWithinRange(boolean v) {
+    if (FileAnnotation_Type.featOkTst && ((FileAnnotation_Type)jcasType).casFeat_withinRange == null)
+      jcasType.jcas.throwFeatMissing("withinRange", "org.quizreader.textmaker.uima.types.FileAnnotation");
+    jcasType.ll_cas.ll_setBooleanValue(addr, ((FileAnnotation_Type)jcasType).casFeatCode_withinRange, v);}    
   }
 
     

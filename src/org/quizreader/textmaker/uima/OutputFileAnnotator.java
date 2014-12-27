@@ -20,6 +20,8 @@ package org.quizreader.textmaker.uima;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -34,44 +36,61 @@ import org.quizreader.textmaker.uima.types.HTMLAnnotation;
 public class OutputFileAnnotator extends JCasAnnotator_ImplBase {
 
 	private static final String CONFIG_PARAM_SPLIT_TAGS = "splitTags";
+	private static final String CONFIG_PARAM_PAGE_RANGE = "pageRange";
 	private int fileCounter;
 	private Set<String> splitTags;
+	private int startPage;
+	private int endPage;
 
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
+		fileCounter = 1;
+		// split tags
 		splitTags = new HashSet<String>();
 		for (String tag : (String[]) aContext.getConfigParameterValue(CONFIG_PARAM_SPLIT_TAGS)) {
 			splitTags.add(tag.toLowerCase());
 		}
-		fileCounter = 1;
+		// page range
+		Integer pageRange = (Integer) aContext.getConfigParameterValue(CONFIG_PARAM_PAGE_RANGE);
+		// pop up dialog if not set
+		if (pageRange == null) {
+			String input = JOptionPane.showInputDialog("Please enter page range:");
+			pageRange = Integer.parseInt(input);
+		}
+		startPage = endPage = pageRange;
 	}
 
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 		// Logger logger = getContext().getLogger();
 
-		FileAnnotation sectionAnno = null;
+		FileAnnotation outputFileAnno = null;
 		AnnotationIndex<Annotation> markupIndex = aJCas.getAnnotationIndex(HTMLAnnotation.type);
 		// create break list
 		for (Annotation anno : markupIndex) {
 			HTMLAnnotation markup = (HTMLAnnotation) anno;
 			if (splitTags.contains(markup.getName().toLowerCase())) {
-				if (sectionAnno != null) {
-					sectionAnno.setEnd(anno.getBegin() - 1);
-					sectionAnno.addToIndexes();
+				// close any open anno
+				if (outputFileAnno != null) {
+					outputFileAnno.setEnd(anno.getBegin() - 1);
+					outputFileAnno.addToIndexes();
 				}
-				sectionAnno = new FileAnnotation(aJCas);
-				sectionAnno.setOutput(true);
-				sectionAnno.setBegin(anno.getBegin());
-				String countSuffix = String.format("%03d", fileCounter++);
-				sectionAnno.setFileName("t" + countSuffix + ".html");
+				// start new output file anno
+				outputFileAnno = new FileAnnotation(aJCas);
+				outputFileAnno.setOutput(true);
+				outputFileAnno.setBegin(anno.getBegin());
+				String countSuffix = String.format("%03d", fileCounter);
+				outputFileAnno.setFileName("t" + countSuffix + ".html");
+				outputFileAnno.setWithinRange(fileCounter >= startPage && fileCounter <= endPage);
+				fileCounter++;
 			}
 		}
-		if (sectionAnno != null) {
+		// finish the last open anno
+		if (outputFileAnno != null) {
 			DocumentAnnotation docAnno = (DocumentAnnotation) aJCas.getDocumentAnnotationFs();
-			sectionAnno.setEnd(docAnno.getEnd() - 1);
-			sectionAnno.addToIndexes();
+			outputFileAnno.setEnd(docAnno.getEnd() - 1);
+			outputFileAnno.addToIndexes();
 		}
 	}
 

@@ -78,8 +78,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 		}
 	}
 
-	private void process(CAS cas) throws CASException, FileNotFoundException, JAXBException, ParserException,
-			UnsupportedEncodingException {
+	private void process(CAS cas) throws CASException, FileNotFoundException, JAXBException, ParserException, UnsupportedEncodingException {
 
 		JCas jcas = cas.getJCas();
 		String documentText = cas.getDocumentText();
@@ -95,7 +94,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 
 			FileAnnotation fileAnno = (FileAnnotation) anno;
 
-			if (!fileAnno.getOutput()) {
+			if (!fileAnno.getOutput() || !fileAnno.getWithinRange()) {
 				continue;
 			}
 
@@ -128,8 +127,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 					if (passTags.contains(lowerTag)) {
 						htmlBuilder.append("<" + lowerTag + ">");
 						addEndTag(endTags, lowerTag, markupAnno.getEnd());
-					}
-					else {
+					} else {
 						suppressTags.add(tag);
 					}
 					markupAnno = htmlAnnoIterator.hasNext() ? htmlAnnoIterator.next() : null;
@@ -145,8 +143,7 @@ public class HTMLOutputWriter extends CasConsumer_ImplBase {
 					String word = ((DefinitionAnnotation) defAnno).getWord();
 					if (word != null) {
 						htmlBuilder.append("<a data-word=\"" + word + "\">");
-					}
-					else {
+					} else {
 						htmlBuilder.append("<a>");
 					}
 					addEndTag(endTags, "a", defAnno.getEnd());

@@ -8,11 +8,13 @@ import java.util.Set;
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
+import org.apache.uima.cas.FSIterator;
 import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
+import org.quizreader.textmaker.uima.types.FileAnnotation;
 import org.quizreader.textmaker.wiktionary.model.Entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,28 +43,43 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 
 	@Override
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
+
 		AnnotationIndex<Annotation> defIndex = aJCas.getAnnotationIndex(DefinitionAnnotation.type);
-		Set<String> entries = new HashSet<String>();
-		try {
-			for (Annotation anno : defIndex) {
+		AnnotationIndex<Annotation> fileIndex = aJCas.getAnnotationIndex(FileAnnotation.type);
+
+		for (Annotation fanno : fileIndex) {
+
+			FileAnnotation fileAnno = (FileAnnotation) fanno;
+
+			if (!fileAnno.getOutput() || !fileAnno.getWithinRange()) {
+				continue;
+			}
+
+			FSIterator<Annotation> defAnnoIterator = defIndex.subiterator(fileAnno);
+			Set<String> entries = new HashSet<String>();
+
+			while (defAnnoIterator.hasNext()) {
+				Annotation anno = defAnnoIterator.next();
 				String word = ((DefinitionAnnotation) anno).getWord();
 				if (word == null) {
 					word = anno.getCoveredText();
 				}
 				if (!entries.contains(word)) {
 					Entry entry = wiktionary.getEntry(word);
-					writeDefinition(word, entry);
-					entries.add(word);
-					String root = getRoot(entry);
-					if (root != null && !entries.contains(root)) {
-						Entry rootEntry = wiktionary.getEntry(root);
-						writeDefinition(root, rootEntry);
-						entries.add(root);
+					try {
+						writeDefinition(word, entry);
+						entries.add(word);
+						String root = getRoot(entry);
+						if (root != null && !entries.contains(root)) {
+							Entry rootEntry = wiktionary.getEntry(root);
+							writeDefinition(root, rootEntry);
+							entries.add(root);
+						}
+					} catch (IOException e) {
+						throw new AnalysisEngineProcessException(e);
 					}
 				}
 			}
-		} catch (IOException e) {
-			throw new AnalysisEngineProcessException(e);
 		}
 	}
 
@@ -71,7 +88,7 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 			return null;
 		}
 		String root = entry.getDefinitions().get(0).getRoot();
-		if(root == null || root.length() == 0) {
+		if (root == null || root.length() == 0) {
 			return null;
 		}
 		return root;

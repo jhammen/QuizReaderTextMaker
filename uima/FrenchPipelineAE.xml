@@ -94,7 +94,7 @@
         <name>splitTags</name>
         <value>
           <array>
-            <string>h2</string>
+            <string>h3</string>
           </array>
         </value>
       </nameValuePair>
@@ -135,6 +135,7 @@
       	<node>DefinitionAnnotatorAE</node>
         <node>OutputFileAE</node>
       <node>DefinitionWriter</node>
+      <node>HTMLOutputWriter</node>
       </fixedFlow>
     </flowConstraints>
     <typePriorities/>

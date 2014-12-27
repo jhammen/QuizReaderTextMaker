@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import org.apache.uima.jcas.tcas.Annotation_Type;
 
 /** 
- * Updated by JCasGen Thu Aug 21 11:44:29 MDT 2014
+ * Updated by JCasGen Sat Dec 27 11:33:55 MST 2014
  * @generated */
 public class FileAnnotation_Type extends Annotation_Type {
   /** @generated */
@@ -79,6 +79,30 @@ public class FileAnnotation_Type extends Annotation_Type {
     ll_cas.ll_setBooleanValue(addr, casFeatCode_output, v);}
     
   
+ 
+  /** @generated */
+  final Feature casFeat_withinRange;
+  /** @generated */
+  final int     casFeatCode_withinRange;
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @return the feature value 
+   */ 
+  public boolean getWithinRange(int addr) {
+        if (featOkTst && casFeat_withinRange == null)
+      jcas.throwFeatMissing("withinRange", "org.quizreader.textmaker.uima.types.FileAnnotation");
+    return ll_cas.ll_getBooleanValue(addr, casFeatCode_withinRange);
+  }
+  /** @generated
+   * @param addr low level Feature Structure reference
+   * @param v value to set 
+   */    
+  public void setWithinRange(int addr, boolean v) {
+        if (featOkTst && casFeat_withinRange == null)
+      jcas.throwFeatMissing("withinRange", "org.quizreader.textmaker.uima.types.FileAnnotation");
+    ll_cas.ll_setBooleanValue(addr, casFeatCode_withinRange, v);}
+    
+  
 
 
 
@@ -95,6 +119,10 @@ public class FileAnnotation_Type extends Annotation_Type {
  
     casFeat_output = jcas.getRequiredFeatureDE(casType, "output", "uima.cas.Boolean", featOkTst);
     casFeatCode_output  = (null == casFeat_output) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_output).getCode();
+
+ 
+    casFeat_withinRange = jcas.getRequiredFeatureDE(casType, "withinRange", "uima.cas.Boolean", featOkTst);
+    casFeatCode_withinRange  = (null == casFeat_withinRange) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_withinRange).getCode();
 
   }
 }

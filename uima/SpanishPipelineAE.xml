@@ -62,7 +62,7 @@
     <nameValuePair>
         <name>definitionPath</name>
         <value>
-          <string>../QuizReaderEnglish/es/def/</string>
+          <string>../QuizReaderSpanish/def/</string>
         </value>
       </nameValuePair>
     </configurationParameterSettings>
