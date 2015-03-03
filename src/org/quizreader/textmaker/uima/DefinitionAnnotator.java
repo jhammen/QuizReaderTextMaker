@@ -75,7 +75,7 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 		Logger logger = getContext().getLogger();
 		// String docText = aJCas.getDocumentText();
-		AnnotationIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type);
+		AnnotationIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type); // TODO: check token annotation type
 		if (tokenIndex.size() == 0) {
 			logger.log(Level.SEVERE, "No token annotations found! Was the document tokenised?");
 			System.err.println("No token annotations found! Was the document tokenised?");
