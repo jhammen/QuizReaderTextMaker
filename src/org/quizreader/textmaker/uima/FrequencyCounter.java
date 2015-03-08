@@ -35,6 +35,7 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
+import org.quizreader.textmaker.util.PosTagConverter;
 import org.quizreader.textmaker.wiktionary.model.Definition;
 import org.quizreader.textmaker.wiktionary.model.Entry;
 
@@ -55,13 +56,16 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 	private List<Definition> getDefinitions(String word, String pos) {
 		final List<Definition> ret = new ArrayList<Definition>();
 		final Entry entry = wiktionary.getEntry(word);
+		String wiktPos = PosTagConverter.universal2wiktionary(pos);
+		if(wiktPos == null) {
+			wiktPos = PosTagConverter.spanish2wiktionary(pos);
+		}
+		//System.out.println("****" + word);
 		if (entry != null && entry.getDefinitions() != null) {
 			for (Definition def : entry.getDefinitions()) {
-				if (def.getType().equalsIgnoreCase(pos)) {
+				if (def.getType().equalsIgnoreCase(wiktPos)) {
+					//System.out.println(def.getType() + " def found!");
 					ret.add(def);
-				}
-				else {
-					System.out.println(def.getType() + "!=" + pos);
 				}
 			}
 		}
@@ -78,6 +82,7 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 			System.err.println("No token annotations found! Was the document tokenised?");
 			return;
 		}
+		final Map<String, List<Definition>> defMap = new HashMap<String, List<Definition>>();
 		final Map<String, Integer> countMap = new HashMap<String, Integer>();
 		for (Annotation tok : tokenIndex) {
 			Token anno = (Token) tok;
@@ -97,9 +102,16 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 				}
 			}
 
-			List<Definition> defList = getDefinitions(word, pos);
-
 			String key = word + "\t" + pos;
+			List<Definition> defList = defMap.get(key); 
+			if(defList == null) {
+				defList = getDefinitions(word, pos);
+				defMap.put(key, defList);
+			}
+			if(defList.size() == 0) {
+				System.out.println("!! no defs for: " + key);
+			}
+			// TODO: use the definitions
 			int count = countMap.get(key) != null ? countMap.get(key) : 0;
 			countMap.put(key, count + 1);
 		}
