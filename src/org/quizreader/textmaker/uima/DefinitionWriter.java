@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+// TODO: remove this class, pipelines should not write definitions
+@Deprecated
 public class DefinitionWriter extends JCasAnnotator_ImplBase {
 
 	private static final String CONFIG_PARAM_DEF_PATH = "definitionPath";
