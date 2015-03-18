@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
+  <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
+  <primitive>false</primitive>
+  <delegateAnalysisEngineSpecifiers>
+    <delegateAnalysisEngine key="HTMLInputAnnotatorAE">
+      <import location="../qr/HTMLInputAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OpenNLPTokenizer">
+      <import location="../opennlp/OpenNLPTokenizer.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="OpenNLPSentenceDetector">
+      <import location="../opennlp/OpenNLPSentenceDetector.xml"/>      
+    </delegateAnalysisEngine>    
+    <delegateAnalysisEngine key="DefinitionAnnotatorAE">
+      <import location="../qr/DefinitionAnnotatorAE.xml"/>
+    </delegateAnalysisEngine>
+    <delegateAnalysisEngine key="AppearanceSorter">
+      <import location="../qr/AppearanceSorter.xml"/>
+    </delegateAnalysisEngine>      
+    </delegateAnalysisEngineSpecifiers>
+  <analysisEngineMetaData>
+    <name>SpanishFrequency</name>
+    <description/>
+    <version>1.0</version>
+    <vendor/>
+    <configurationParameters searchStrategy="language_fallback">
+      <configurationParameter>
+        <name>inputList</name>
+        <type>String</type>
+        <multiValued>false</multiValued>
+        <mandatory>true</mandatory>
+        <overrides>
+          <parameter>AppearanceSorter/inputList</parameter>
+        </overrides>
+      </configurationParameter>
+    </configurationParameters>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>inputList</name>
+        <value>
+          <string>samplelist.txt</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
+    <flowConstraints>
+      <fixedFlow>
+        <node>HTMLInputAnnotatorAE</node>
+        <node>OpenNLPSentenceDetector</node>
+        <node>OpenNLPTokenizer</node>
+        <node>DefinitionAnnotatorAE</node>
+      <node>AppearanceSorter</node>
+      </fixedFlow>
+    </flowConstraints>
+    <typePriorities/>
+    <fsIndexCollection/>
+    <capabilities>
+      <capability>
+        <inputs/>
+        <outputs>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.HTMLAnnotation</type>
+          <type allAnnotatorFeatures="true">org.apache.uima.SentenceAnnotation</type>          
+          <type allAnnotatorFeatures="true">opennlp.uima.Token</type>
+          <type allAnnotatorFeatures="true">org.quizreader.textmaker.uima.types.DefinitionAnnotation</type>
+        </outputs>
+        <outputSofas>
+          <sofaName>pipelineTextView</sofaName>
+        </outputSofas>
+        <languagesSupported>
+          <language>es</language>
+        </languagesSupported>
+      </capability>
+    </capabilities>
+    <operationalProperties>
+      <modifiesCas>true</modifiesCas>
+      <multipleDeploymentAllowed>true</multipleDeploymentAllowed>
+      <outputsNewCASes>false</outputsNewCASes>
+    </operationalProperties>
+  </analysisEngineMetaData>
+  
+  <resourceManagerConfiguration>
+  <externalResources>
+			<externalResource>
+				<name>TokenModel</name>
+				<description/>
+        <fileResourceSpecifier>
+					<fileUrl>file:models/it-token.bin</fileUrl>
+				</fileResourceSpecifier>
+				<implementationName>opennlp.uima.tokenize.TokenizerModelResourceImpl</implementationName>
+			</externalResource>
+			<externalResource>
+        <name>SentenceModel</name>
+        <description/>
+        <fileResourceSpecifier>
+          <fileUrl>file:models/it-sent.bin</fileUrl>
+        </fileResourceSpecifier>
+      <implementationName>opennlp.uima.sentdetect.SentenceModelResourceImpl</implementationName>
+      </externalResource>
+    <externalResource>
+				<name>Wiktionary</name>
+				<description/>
+        <fileResourceSpecifier>
+					<fileUrl>file:data/enwikt_latest_spanish.xml</fileUrl>
+				</fileResourceSpecifier>
+				<implementationName>org.quizreader.textmaker.wiktionary.WiktionaryResourceImpl</implementationName>
+			</externalResource>			      
+    </externalResources>
+		
+	<externalResourceBindings>
+			<externalResourceBinding>
+        <key>OpenNLPTokenizer/opennlp.uima.ModelName</key>
+        <resourceName>TokenModel</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>OpenNLPSentenceDetector/opennlp.uima.ModelName</key>
+        <resourceName>SentenceModel</resourceName>
+      </externalResourceBinding> 
+    <externalResourceBinding>
+        <key>DefinitionAnnotatorAE/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    <externalResourceBinding>
+        <key>AppearanceSorter/Wiktionary</key>
+        <resourceName>Wiktionary</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+	</resourceManagerConfiguration>
+  <sofaMappings>
+    <sofaMapping>
+      <componentKey>HTMLInputAnnotatorAE</componentKey>
+      <componentSofaName>textView</componentSofaName>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+    <sofaMapping>
+      <componentKey>OpenNLPTokenizer</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  	<sofaMapping>
+      <componentKey>OpenNLPSentenceDetector</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+		<sofaMapping>
+      <componentKey>OpenNLPPosTagger</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>  
+  	<sofaMapping>
+      <componentKey>DefinitionAnnotatorAE</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  	<sofaMapping>
+      <componentKey>AppearanceSorter</componentKey>
+      <aggregateSofaName>pipelineTextView</aggregateSofaName>
+    </sofaMapping>
+  </sofaMappings>
+</analysisEngineDescription>

@@ -39,6 +39,10 @@ import org.quizreader.textmaker.util.PosTagConverter;
 import org.quizreader.textmaker.wiktionary.model.Definition;
 import org.quizreader.textmaker.wiktionary.model.Entry;
 
+/**
+ * creates a wordlist (with pos) from a text + dictionary, wordlist is sorted by frequency in the text
+ *
+ */
 public class FrequencyCounter extends JCasAnnotator_ImplBase {
 
 	private WiktionaryResource wiktionary;
@@ -57,14 +61,14 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 		final List<Definition> ret = new ArrayList<Definition>();
 		final Entry entry = wiktionary.getEntry(word);
 		String wiktPos = PosTagConverter.universal2wiktionary(pos);
-		if(wiktPos == null) {
+		if (wiktPos == null) {
 			wiktPos = PosTagConverter.spanish2wiktionary(pos);
 		}
-		//System.out.println("****" + word);
+		// System.out.println("****" + word);
 		if (entry != null && entry.getDefinitions() != null) {
 			for (Definition def : entry.getDefinitions()) {
 				if (def.getType().equalsIgnoreCase(wiktPos)) {
-					//System.out.println(def.getType() + " def found!");
+					// System.out.println(def.getType() + " def found!");
 					ret.add(def);
 				}
 			}
@@ -103,12 +107,12 @@ public class FrequencyCounter extends JCasAnnotator_ImplBase {
 			}
 
 			String key = word + "\t" + pos;
-			List<Definition> defList = defMap.get(key); 
-			if(defList == null) {
+			List<Definition> defList = defMap.get(key);
+			if (defList == null) {
 				defList = getDefinitions(word, pos);
 				defMap.put(key, defList);
 			}
-			if(defList.size() == 0) {
+			if (defList.size() == 0) {
 				System.out.println("!! no defs for: " + key);
 			}
 			// TODO: use the definitions

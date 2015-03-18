@@ -23,7 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.uima.TokenAnnotation;
+import opennlp.uima.Token;
+
 import org.apache.uima.UimaContext;
 import org.apache.uima.analysis_component.JCasAnnotator_ImplBase;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -75,7 +76,7 @@ public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
 		Logger logger = getContext().getLogger();
 		// String docText = aJCas.getDocumentText();
-		AnnotationIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(TokenAnnotation.type); // TODO: check token annotation type
+		AnnotationIndex<Annotation> tokenIndex = aJCas.getAnnotationIndex(Token.type);
 		if (tokenIndex.size() == 0) {
 			logger.log(Level.SEVERE, "No token annotations found! Was the document tokenised?");
 			System.err.println("No token annotations found! Was the document tokenised?");
