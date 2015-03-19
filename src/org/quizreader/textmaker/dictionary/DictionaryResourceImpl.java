@@ -14,26 +14,23 @@
  You should have received a copy of the GNU General Public License
  along with QuizReader.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.quizreader.textmaker.dictionary;
 
-package org.quizreader.textmaker.wiktionary;
-
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 
 import org.apache.uima.resource.DataResource;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.SharedResourceObject;
+import org.quizreader.textmaker.dictionary.model.Definition;
 import org.quizreader.textmaker.dictionary.model.Entry;
-import org.quizreader.textmaker.dictionary.model.Wiktionary;
 import org.quizreader.textmaker.uima.DictionaryResource;
 
-public class WiktionaryResourceImpl implements DictionaryResource, SharedResourceObject {
+public class DictionaryResourceImpl implements DictionaryResource, SharedResourceObject {
 
 	private Map<String, Entry> entries;
 
@@ -46,19 +43,29 @@ public class WiktionaryResourceImpl implements DictionaryResource, SharedResourc
 		}
 	}
 
-	public void load(InputStream inputStream) throws IOException {
+	@Override
+	public void load(InputStream is) throws IOException {
 		entries = new HashMap<String, Entry>();
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(Wiktionary.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			Wiktionary wikt = (Wiktionary) jaxbUnmarshaller.unmarshal(inputStream);
-			for (Entry entry : wikt.getEntries()) {
-				entry.setSource(wikt.getSource());
-				entries.put(entry.getWord(), entry);
+		BufferedReader bis = new BufferedReader(new InputStreamReader(is));
+		String line = bis.readLine();
+		while (line != null) {
+			if (line.startsWith("#") || line.length() < 2) {
+				line = bis.readLine();
+				continue;
 			}
-			System.out.println(entries.size() + " wiktionary entries loaded");
-		} catch (JAXBException e) {
-			throw new IOException(e);
+			String[] tok = line.split("\\t+");
+			Entry entry = entries.get(tok[0]);
+			if (entry == null) {
+				entry = new Entry();
+				entry.setWord(tok[0]);
+				entries.put(tok[0], entry);
+			}
+			if (tok.length == 2) {
+				Definition def = new Definition();
+				def.setText(tok[1]);
+				entry.getDefinitions().add(def);
+			}
+			line = bis.readLine();
 		}
 	}
 
@@ -66,4 +73,5 @@ public class WiktionaryResourceImpl implements DictionaryResource, SharedResourc
 	public Entry getEntry(String word) {
 		return entries.get(word);
 	}
+
 }

@@ -35,9 +35,9 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
+import org.quizreader.textmaker.dictionary.model.Definition;
+import org.quizreader.textmaker.dictionary.model.Entry;
 import org.quizreader.textmaker.util.PosTagConverter;
-import org.quizreader.textmaker.wiktionary.model.Definition;
-import org.quizreader.textmaker.wiktionary.model.Entry;
 
 /**
  * creates a wordlist (with pos) from a text + dictionary, wordlist is sorted by frequency in the text
@@ -45,13 +45,13 @@ import org.quizreader.textmaker.wiktionary.model.Entry;
  */
 public class FrequencyCounter extends JCasAnnotator_ImplBase {
 
-	private WiktionaryResource wiktionary;
+	private DictionaryResource wiktionary;
 
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
 		try {
-			wiktionary = (WiktionaryResource) getContext().getResourceObject("Wiktionary");
+			wiktionary = (DictionaryResource) getContext().getResourceObject("Wiktionary");
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}

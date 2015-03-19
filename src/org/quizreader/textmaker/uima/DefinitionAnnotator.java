@@ -34,19 +34,19 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
+import org.quizreader.textmaker.dictionary.model.Definition;
+import org.quizreader.textmaker.dictionary.model.Entry;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
-import org.quizreader.textmaker.wiktionary.model.Definition;
-import org.quizreader.textmaker.wiktionary.model.Entry;
 
 public class DefinitionAnnotator extends JCasAnnotator_ImplBase {
 
-	private WiktionaryResource wiktionary;
+	private DictionaryResource wiktionary;
 
 	@Override
 	public void initialize(UimaContext aContext) throws ResourceInitializationException {
 		super.initialize(aContext);
 		try {
-			wiktionary = (WiktionaryResource) getContext().getResourceObject("Wiktionary");
+			wiktionary = (DictionaryResource) getContext().getResourceObject("Wiktionary");
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);
 		}

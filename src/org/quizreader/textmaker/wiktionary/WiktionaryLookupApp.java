@@ -28,8 +28,8 @@ import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import org.quizreader.textmaker.wiktionary.model.Definition;
-import org.quizreader.textmaker.wiktionary.model.Entry;
+import org.quizreader.textmaker.dictionary.model.Definition;
+import org.quizreader.textmaker.dictionary.model.Entry;
 
 public class WiktionaryLookupApp {
 	WiktionaryResourceImpl wiktionary = new WiktionaryResourceImpl();

@@ -39,9 +39,9 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 import org.apache.uima.util.Logger;
+import org.quizreader.textmaker.dictionary.model.Definition;
+import org.quizreader.textmaker.dictionary.model.Entry;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
-import org.quizreader.textmaker.wiktionary.model.Definition;
-import org.quizreader.textmaker.wiktionary.model.Entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +52,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class AppearanceSorter extends JCasAnnotator_ImplBase {
 
-	private WiktionaryResource wiktionary;
+	private DictionaryResource wiktionary;
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private static final String CONFIG_PARAM_INPUT_LIST = "inputList";
 	private final Set<String> wordSet = new HashSet<String>();
@@ -63,7 +63,7 @@ public class AppearanceSorter extends JCasAnnotator_ImplBase {
 		super.initialize(aContext);
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		try {
-			wiktionary = (WiktionaryResource) getContext().getResourceObject("Wiktionary");
+			wiktionary = (DictionaryResource) getContext().getResourceObject("Wiktionary");
 			String inputListPath = (String) aContext.getConfigParameterValue(CONFIG_PARAM_INPUT_LIST);
 			// FileReader fr = new FileReader(inputListPath);
 			FileReader fr = new FileReader("./samplelist.txt");

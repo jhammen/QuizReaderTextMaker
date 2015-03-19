@@ -15,31 +15,35 @@
  along with QuizReader.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.quizreader.textmaker.definitions;
+package org.quizreader.textmaker.dictionary.model;
 
-public class WordlistEntry {
+import java.util.List;
 
-	private String word;
-	private String type;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
-	public WordlistEntry(String word) {
-		this.word = word;
+@XmlRootElement(name = "wikt")
+public class Wiktionary {
+
+	private List<Entry> entries;
+	private String source;
+
+	@XmlElement(name = "page")
+	public List<Entry> getEntries() {
+		return entries;
 	}
 
-	public String getWord() {
-		return word;
+	public void setEntries(List<Entry> entries) {
+		this.entries = entries;
 	}
 
-	public void setWord(String word) {
-		this.word = word;
+	@XmlAttribute
+	public String getSource() {
+		return source;
 	}
 
-	public String getType() {
-		return type;
+	public void setSource(String source) {
+		this.source = source;
 	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 }

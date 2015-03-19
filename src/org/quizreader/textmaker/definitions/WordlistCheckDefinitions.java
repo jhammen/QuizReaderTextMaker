@@ -24,13 +24,20 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
-import org.quizreader.textmaker.wiktionary.model.Definition;
-import org.quizreader.textmaker.wiktionary.model.Entry;
+import org.quizreader.textmaker.dictionary.model.Definition;
+import org.quizreader.textmaker.dictionary.model.Entry;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * 
+ * Simple application to check a wordlist against a definition store.
+ * 
+ * No dictionaries used, stub files will be created for missing definitions.
+ *
+ */
 public class WordlistCheckDefinitions {
 
 	public static void main(String[] argv) throws IOException, JAXBException {
@@ -60,7 +67,7 @@ public class WordlistCheckDefinitions {
 				defStore.writeEntry(entry);
 			}
 			else if (!hasType(jsonEntry, listEntry)) {
-				System.err.println(word + " has definition but no part of speech: " + listEntry.getType());
+				System.err.println(word + " has definition but no matching part of speech: " + listEntry.getType());
 			}
 			count++;
 		}

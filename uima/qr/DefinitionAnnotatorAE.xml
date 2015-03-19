@@ -34,7 +34,7 @@
     <externalResourceDependency>
       <key>Wiktionary</key>
       <description/>
-      <interfaceName>org.quizreader.textmaker.uima.WiktionaryResource</interfaceName>
+      <interfaceName>org.quizreader.textmaker.uima.DictionaryResource</interfaceName>
       <optional>false</optional>
     </externalResourceDependency>
   </externalResourceDependencies>

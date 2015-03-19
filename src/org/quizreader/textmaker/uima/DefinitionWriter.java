@@ -13,9 +13,9 @@ import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
+import org.quizreader.textmaker.dictionary.model.Entry;
 import org.quizreader.textmaker.uima.types.DefinitionAnnotation;
 import org.quizreader.textmaker.uima.types.FileAnnotation;
-import org.quizreader.textmaker.wiktionary.model.Entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 	private static final String CONFIG_PARAM_DEF_PATH = "definitionPath";
 
 	private ObjectMapper objectMapper = new ObjectMapper();
-	private WiktionaryResource wiktionary;
+	private DictionaryResource wiktionary;
 	private String definitionPath;
 
 	@Override
@@ -36,7 +36,7 @@ public class DefinitionWriter extends JCasAnnotator_ImplBase {
 		super.initialize(aContext);
 		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 		try {
-			wiktionary = (WiktionaryResource) getContext().getResourceObject("Wiktionary");
+			wiktionary = (DictionaryResource) getContext().getResourceObject("Wiktionary");
 			definitionPath = (String) aContext.getConfigParameterValue(CONFIG_PARAM_DEF_PATH);
 		} catch (Exception e) {
 			throw new ResourceInitializationException(e);

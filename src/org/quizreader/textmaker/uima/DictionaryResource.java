@@ -14,32 +14,17 @@
  You should have received a copy of the GNU General Public License
  along with QuizReader.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.quizreader.textmaker.uima;
 
-package org.quizreader.textmaker.definitions;
+import java.io.IOException;
+import java.io.InputStream;
 
-public class WordlistEntry {
+import org.quizreader.textmaker.dictionary.model.Entry;
 
-	private String word;
-	private String type;
+public interface DictionaryResource {
 
-	public WordlistEntry(String word) {
-		this.word = word;
-	}
+	public Entry getEntry(String word);
 
-	public String getWord() {
-		return word;
-	}
-
-	public void setWord(String word) {
-		this.word = word;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+	public void load(InputStream fis) throws IOException;
 
 }
