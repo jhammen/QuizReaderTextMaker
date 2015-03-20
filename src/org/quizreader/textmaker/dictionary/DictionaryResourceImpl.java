@@ -60,11 +60,15 @@ public class DictionaryResourceImpl implements DictionaryResource, SharedResourc
 				entry.setWord(tok[0]);
 				entries.put(tok[0], entry);
 			}
+			Definition def = new Definition();
 			if (tok.length == 2) {
-				Definition def = new Definition();
 				def.setText(tok[1]);
-				entry.getDefinitions().add(def);
 			}
+			else if (tok.length == 3) {
+				def.setType(tok[1]);
+				def.setText(tok[2]);
+			}
+			entry.getDefinitions().add(def);
 			line = bis.readLine();
 		}
 	}

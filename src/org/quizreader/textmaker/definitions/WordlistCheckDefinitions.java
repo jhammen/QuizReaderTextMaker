@@ -41,12 +41,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class WordlistCheckDefinitions {
 
 	public static void main(String[] argv) throws IOException, JAXBException {
-		new WordlistCheckDefinitions().run(argv[0], argv[1]);
+		new WordlistCheckDefinitions().run(argv[0], argv[1], argv.length > 2);
 	}
 
-	private void run(String wordlistPath, String definitionPath) throws FileNotFoundException, JAXBException, IOException,
-			JsonParseException, JsonMappingException {
+	private void run(String wordlistPath, String definitionPath, boolean write) throws FileNotFoundException, JAXBException,
+			IOException, JsonParseException, JsonMappingException {
 
+		System.out.println("will create files: " + write);
 		DefinitionStore defStore = new DefinitionStore(definitionPath);
 		// load word list
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -61,12 +62,15 @@ public class WordlistCheckDefinitions {
 			final Entry jsonEntry = defStore.getEntry(word);
 
 			if (jsonEntry == null) {
-				System.err.println(word + " has no definition! writing stub...");
-				final Entry entry = new Entry();
-				entry.setWord(word);
-				defStore.writeEntry(entry);
+				System.err.println(word + " has no definition file!");
+				if (write) {
+					System.err.println("writing stub...");
+					final Entry entry = new Entry();
+					entry.setWord(word);
+					defStore.writeEntry(entry);
+				}
 			}
-			else if (!hasType(jsonEntry, listEntry)) {
+			else if (listEntry.getType() != null && !hasType(jsonEntry, listEntry)) {
 				System.err.println(word + " has definition but no matching part of speech: " + listEntry.getType());
 			}
 			count++;
@@ -78,7 +82,8 @@ public class WordlistCheckDefinitions {
 
 	private boolean hasType(Entry dictEntry, WordlistEntry entry) {
 		for (Definition def : dictEntry.getDefinitions()) {
-			if (def.getType().equals(entry.getType())) {
+			final String type = def.getType();
+			if (type != null && type.equals(entry.getType())) {
 				return true;
 			}
 		}
