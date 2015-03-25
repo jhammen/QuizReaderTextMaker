@@ -25,7 +25,6 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 
 import org.quizreader.textmaker.dictionary.model.Definition;
-import org.quizreader.textmaker.dictionary.model.Entry;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -41,11 +40,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class WordlistCheckDefinitions {
 
 	public static void main(String[] argv) throws IOException, JAXBException {
-		new WordlistCheckDefinitions().run(argv[0], argv[1], argv.length > 2);
+		new WordlistCheckDefinitions().run(argv[0], argv[1], argv[2], argv.length > 3);
 	}
 
-	private void run(String wordlistPath, String definitionPath, boolean write) throws FileNotFoundException, JAXBException,
-			IOException, JsonParseException, JsonMappingException {
+	private void run(String wordlistPath, String definitionPath, String sourceId, boolean write) throws FileNotFoundException,
+			JAXBException, IOException, JsonParseException, JsonMappingException {
 
 		System.out.println("will create files: " + write);
 		DefinitionStore defStore = new DefinitionStore(definitionPath);
@@ -59,29 +58,48 @@ public class WordlistCheckDefinitions {
 		int count = 0;
 		for (WordlistEntry listEntry : entries) {
 			final String word = listEntry.getWord();
-			final Entry jsonEntry = defStore.getEntry(word);
 
-			if (jsonEntry == null) {
+			if (!defStore.hasEntry(word)) {
 				System.err.println(word + " has no definition file!");
 				if (write) {
 					System.err.println("writing stub...");
-					final Entry entry = new Entry();
-					entry.setWord(word);
-					defStore.writeEntry(entry);
+					defStore.touch(word);
 				}
+				continue;
 			}
-			else if (listEntry.getType() != null && !hasType(jsonEntry, listEntry)) {
-				System.err.println(word + " has definition but no matching part of speech: " + listEntry.getType());
+			// check for any defrinitions
+			final List<Definition> allDefs = defStore.getDefinitions(word);
+			if (allDefs == null || allDefs.size() == 0) {
+				System.err.println(word + " has no definitions at all");
+				continue;
+			}
+			// check for any defrinitions from given sourceId
+			final List<Definition> definitions = defStore.getDefinitions(sourceId, word);
+			if (definitions == null || definitions.size() == 0) {
+				System.err.println(word + " has no definitions from source " + sourceId);
+				continue;
+			}
+
+			if (listEntry.getType() != null) {
+				if (!hasType(allDefs, listEntry)) {
+					System.err.println(word + " has definition but no matching part of speech: " + listEntry.getType());
+					continue;
+				}
+				if (!hasType(allDefs, listEntry)) {
+					System.err.println(word + " has definition but no matching part of speech: " + listEntry.getType()
+							+ " from sourceId " + sourceId);
+					continue;
+				}
 			}
 			count++;
 		}
 		fr.close();
-		System.out.println(count + " entries checked");
+		System.out.println(entries.size() + " entries checked, " + count + " had no issues");
 		System.out.println("done.");
 	}
 
-	private boolean hasType(Entry dictEntry, WordlistEntry entry) {
-		for (Definition def : dictEntry.getDefinitions()) {
+	private boolean hasType(List<Definition> defList, WordlistEntry entry) {
+		for (Definition def : defList) {
 			final String type = def.getType();
 			if (type != null && type.equals(entry.getType())) {
 				return true;

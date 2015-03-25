@@ -20,6 +20,8 @@ package org.quizreader.textmaker.dictionary.model;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Definition {
 
 	private String type;
@@ -27,6 +29,7 @@ public class Definition {
 	private String root;
 
 	@XmlAttribute
+	@JsonProperty("t")
 	public String getType() {
 		return type;
 	}
@@ -36,6 +39,7 @@ public class Definition {
 	}
 
 	@XmlAttribute
+	@JsonProperty("r")
 	public String getRoot() {
 		return root;
 	}
@@ -45,6 +49,7 @@ public class Definition {
 	}
 
 	@XmlValue
+	@JsonProperty("x")
 	public String getText() {
 		return text;
 	}

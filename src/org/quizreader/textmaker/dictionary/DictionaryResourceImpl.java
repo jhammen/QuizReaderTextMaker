@@ -22,6 +22,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.uima.resource.DataResource;
 import org.apache.uima.resource.ResourceInitializationException;
@@ -33,6 +35,8 @@ import org.quizreader.textmaker.uima.DictionaryResource;
 public class DictionaryResourceImpl implements DictionaryResource, SharedResourceObject {
 
 	private Map<String, Entry> entries;
+	private Pattern sourcePattern = Pattern.compile("source=\\s*([^\\s]+)");
+	private String sourceId;
 
 	@Override
 	public void load(DataResource aData) throws ResourceInitializationException {
@@ -44,10 +48,20 @@ public class DictionaryResourceImpl implements DictionaryResource, SharedResourc
 	}
 
 	@Override
+	public String getSourceId() {
+		return sourceId;
+	}
+
+	@Override
 	public void load(InputStream is) throws IOException {
 		entries = new HashMap<String, Entry>();
 		BufferedReader bis = new BufferedReader(new InputStreamReader(is));
 		String line = bis.readLine();
+		Matcher matcher = sourcePattern.matcher(line);
+		if (line == null || !matcher.find()) {
+			throw new IOException("tab file first line must contains 'source='");
+		}
+		sourceId = matcher.group(1);
 		while (line != null) {
 			if (line.startsWith("#") || line.length() < 2) {
 				line = bis.readLine();

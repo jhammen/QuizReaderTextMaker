@@ -52,9 +52,10 @@ public class DefinitionUpdater {
 		}
 
 		// load dictionary
-		FileInputStream fis = new FileInputStream(dictionaryPath);
+		final FileInputStream fis = new FileInputStream(dictionaryPath);
 		dictionary.load(fis);
 		fis.close();
+		final String sourceId = dictionary.getSourceId();
 
 		// definition store
 		DefinitionStore defStore = new DefinitionStore(definitionPath);
@@ -62,24 +63,26 @@ public class DefinitionUpdater {
 		// loop over all definions
 		int changedWords = 0;
 		int totalWords = 0;
-		Set<String> templates = new HashSet<String>();
-		List<String> missingWords = new ArrayList<String>();
+		final Set<String> templates = new HashSet<String>();
+		final List<String> missingWords = new ArrayList<String>();
 
-		for (Entry defEntry : defStore.getAll()) {
-			final Entry dictEntry = dictionary.getEntry(defEntry.getWord());
+		for (String word : defStore.getAll()) {
+			final Entry dictEntry = dictionary.getEntry(word);
+			final List<Definition> defList = defStore.getDefinitions(sourceId, word);
 			if (dictEntry == null) {
-				missingWords.add(defEntry.getWord());
+				missingWords.add(word);
 			}
-			else if (defStore.differs(defEntry, dictEntry)) {
+			else if (defList == null || differs(defList, dictEntry)) {
 				changedWords++;
-				System.out.println("********************************* " + defEntry.getWord());
-				System.out.println(defStore.entryToString(defEntry));
-				System.out.println(defStore.entryToString(dictEntry));
+				System.out.println("********************************* " + word);
+				System.out.println(defStore.listToString(defList));
+				System.out.println(defStore.listToString(dictEntry.getDefinitions()));
 				if (write) {
-					defStore.writeEntry(dictEntry);
+					defStore.writeEntry(word, sourceId, dictEntry.getDefinitions());
 				}
 			}
-			final List<String> fileTemplates = checkForTemplates(defEntry);
+
+			final List<String> fileTemplates = defList == null ? null : checkForTemplates(defList);
 			if (fileTemplates != null) {
 				templates.addAll(fileTemplates);
 			}
@@ -100,9 +103,22 @@ public class DefinitionUpdater {
 		System.out.println(totalWords + " total definition files");
 	}
 
-	private List<String> checkForTemplates(final Entry fileEntry) {
+	public boolean differs(List<Definition> defList, Entry dictEntry) {
+		if (defList.size() != dictEntry.getDefinitions().size()) {
+			return true;
+		}
+		int index = 0;
+		for (Definition def : defList) {
+			if (!def.getText().equals(dictEntry.getDefinitions().get(index++).getText())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private List<String> checkForTemplates(final List<Definition> defList) {
 		List<String> templates = null;
-		for (Definition def : fileEntry.getDefinitions()) {
+		for (Definition def : defList) {
 			Matcher matcher = templatePattern.matcher(def.getText());
 			if (matcher.find()) {
 				if (templates == null) {

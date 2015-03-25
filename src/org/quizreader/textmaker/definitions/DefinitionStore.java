@@ -24,10 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.quizreader.textmaker.dictionary.model.Definition;
-import org.quizreader.textmaker.dictionary.model.Entry;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
@@ -51,19 +49,17 @@ public class DefinitionStore {
 		return new File(basePath + path(word), word + ".json");
 	}
 
-	private List<Entry> getFolderEntries(File folder) throws IOException {
-		List<Entry> ret = new ArrayList<Entry>();
+	private List<String> getFolderWords(File folder) throws IOException {
+		List<String> ret = new ArrayList<String>();
 		File[] entryFiles = folder.listFiles(new FileFilter() {
 			public boolean accept(File file) {
 				return file.isFile();
 			}
 		});
 		for (File entryFile : entryFiles) {
-			final Entry entry = objectMapper.readValue(entryFile, Entry.class);
 			final String name = entryFile.getName();
 			final String word = name.substring(0, name.indexOf('.'));
-			entry.setWord(word);
-			ret.add(entry);
+			ret.add(word);
 		}
 		File[] childFolders = folder.listFiles(new FileFilter() {
 			public boolean accept(File file) {
@@ -71,51 +67,62 @@ public class DefinitionStore {
 			}
 		});
 		for (File childFolder : childFolders) {
-			ret.addAll(getFolderEntries(childFolder));
+			ret.addAll(getFolderWords(childFolder));
 		}
 		return ret;
 	}
 
-	public List<Entry> getAll() throws IOException {
-		return getFolderEntries(new File(basePath));
+	public List<String> getAll() throws IOException {
+		return getFolderWords(new File(basePath));
 	}
 
-	public Entry getEntry(String word) throws IOException {
+	public List<Definition> getDefinitions(String sourceId, String word) throws IOException {
+		final DefinitionStoreEntry entry = getEntry(word);
+		return entry == null ? null : entry.get(sourceId);
+	}
+
+	public List<Definition> getDefinitions(String word) throws IOException {
+		final DefinitionStoreEntry entry = getEntry(word);
+		return entry == null ? null : entry.getAll();
+	}
+
+	public boolean hasEntry(String word) {
+		return wordFile(word).exists();
+	}
+
+	public void touch(String word) throws IOException {
+		File file = wordFile(word);
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+			objectWriter.writeValue(file, new DefinitionStoreEntry());
+		}
+	}
+
+	public void writeEntry(String word, String source, List<Definition> definitions) throws IOException {
+		File file = wordFile(word);
+		System.out.println("writing file: " + file.getName());
+		if (!file.exists()) {
+			file.getParentFile().mkdirs();
+			DefinitionStoreEntry entry = new DefinitionStoreEntry();
+			entry.put(source, definitions);
+			objectWriter.writeValue(file, entry);
+		}
+		else {
+			DefinitionStoreEntry entry = getEntry(word);
+			entry.put(source, definitions);
+			objectWriter.writeValue(file, entry);
+		}
+	}
+
+	public String listToString(List<Definition> definitions) throws IOException {
+		return objectWriter.writeValueAsString(definitions);
+	}
+
+	private DefinitionStoreEntry getEntry(String word) throws IOException {
 		final File file = wordFile(word);
 		if (!file.exists()) {
 			return null;
 		}
-		final Entry entry = objectMapper.readValue(file, Entry.class);
-		entry.setWord(word);
-		return entry;
-	}
-
-	public void writeEntry(Entry entry) throws IOException {
-		File file = wordFile(entry.getWord());
-		if (!file.exists()) {
-			file.getParentFile().mkdirs();
-		}
-		objectWriter.writeValue(file, entry);
-		System.out.println("writing file: " + file.getName());
-	}
-
-	public boolean differs(Entry fileEntry, Entry wiktEntry) {
-		if (wiktEntry == null) {
-			return true;
-		}
-		if (fileEntry.getDefinitions().size() != wiktEntry.getDefinitions().size()) {
-			return true;
-		}
-		int index = 0;
-		for (Definition def : fileEntry.getDefinitions()) {
-			if (!def.getText().equals(wiktEntry.getDefinitions().get(index++).getText())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public String entryToString(Entry entry) throws JsonProcessingException {
-		return objectWriter.writeValueAsString(entry);
+		return objectMapper.readValue(file, DefinitionStoreEntry.class);
 	}
 }

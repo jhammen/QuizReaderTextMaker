@@ -14,18 +14,29 @@
  You should have received a copy of the GNU General Public License
  along with QuizReader.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.quizreader.textmaker.uima;
+package org.quizreader.textmaker.definitions;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-import org.quizreader.textmaker.dictionary.model.Entry;
+import org.quizreader.textmaker.dictionary.model.Definition;
 
-public interface DictionaryResource {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-	public String getSourceId();
+/**
+ * 
+ * Model object for a single json file in a definition store
+ *
+ */
+public class DefinitionStoreEntry extends HashMap<String, List<Definition>> {
 
-	public void load(InputStream fis) throws IOException;
-
-	public Entry getEntry(String word);
+	@JsonIgnore
+	public List<Definition> getAll() {
+		List<Definition> ret = new ArrayList<Definition>();
+		for (String key : keySet()) {
+			ret.addAll(get(key));
+		}
+		return ret;
+	}
 }

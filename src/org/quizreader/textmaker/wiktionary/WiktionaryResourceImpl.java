@@ -46,6 +46,11 @@ public class WiktionaryResourceImpl implements DictionaryResource, SharedResourc
 		}
 	}
 
+	@Override
+	public String getSourceId() {
+		return "wiktionary.org";
+	}
+
 	public void load(InputStream inputStream) throws IOException {
 		entries = new HashMap<String, Entry>();
 		try {
